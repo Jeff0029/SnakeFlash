@@ -2,6 +2,7 @@ package
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import Test.TestMath;
 	
 	/**
 	 * ...
@@ -14,6 +15,8 @@ package
 		{
 			if (stage) init();
 			else addEventListener(Event.ADDED_TO_STAGE, init);
+			
+			TestMath.TestMaths();
 		}
 		
 		private function init(e:Event = null):void 
