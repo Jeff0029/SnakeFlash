@@ -3,6 +3,7 @@ package
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import Test.TestMath;
+	import Gameplay.Tiles;
 	
 	/**
 	 * ...
@@ -15,7 +16,7 @@ package
 		{
 			if (stage) init();
 			else addEventListener(Event.ADDED_TO_STAGE, init);
-			
+			var tileSet:Tiles = new Tiles();
 			TestMath.TestMaths();
 		}
 		

@@ -24,7 +24,5 @@ package Test
 			
 			return allPass;	
 		}
-		
 	}
-
 }

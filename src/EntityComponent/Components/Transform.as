@@ -7,7 +7,7 @@ package EntityComponent.Components
 	 */
 	public class Transform 
 	{
-		var position : Vector2;
+		public var position : Vector2;
 		var rotation : Number;
 		
 		public function Transform() 
