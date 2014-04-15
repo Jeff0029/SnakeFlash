@@ -4,6 +4,7 @@ package
 	import flash.events.Event;
 	import Test.TestEntityComponent;
 	import Test.TestMath;
+	import Gameplay.Tiles;
 	
 	/**
 	 * ...
@@ -16,7 +17,7 @@ package
 		{
 			if (stage) init();
 			else addEventListener(Event.ADDED_TO_STAGE, init);
-			
+			var tileSet:Tiles = new Tiles();
 			TestMath.TestMaths();
 			TestEntityComponent.TestEntityComponents();
 		}
