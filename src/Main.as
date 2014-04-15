@@ -2,6 +2,7 @@ package
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import Test.TestEntityComponent;
 	import Test.TestMath;
 	
 	/**
@@ -17,6 +18,7 @@ package
 			else addEventListener(Event.ADDED_TO_STAGE, init);
 			
 			TestMath.TestMaths();
+			TestEntityComponent.TestEntityComponents();
 		}
 		
 		private function init(e:Event = null):void 

@@ -2,8 +2,8 @@ package MathLib
 {
 	import Math;
 	/**
-	 * ...
-	 * @author ...
+	 * A generic 2D vector class.
+	 * @author Erik
 	 */
 	public class Vector2 
 	{

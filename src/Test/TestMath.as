@@ -3,16 +3,11 @@ package Test
 	import Math;
 	import MathLib.Vector2;
 	/**
-	 * ...
-	 * @author ...
+	 * Tests for the Math package.
+	 * @author Erik
 	 */
 	public class TestMath 
-	{
-		
-		public function TestMath() 
-		{
-		}
-		
+	{	
 		public static function TestMaths() : void
 		{
 			var tests : Vector.<Boolean> = new Vector.<Boolean>();

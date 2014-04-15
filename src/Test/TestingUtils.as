@@ -1,9 +1,10 @@
 package Test 
 {
+	import flash.utils.getQualifiedClassName;
 	import Math;
 	/**
-	 * ...
-	 * @author ...
+	 * Utilities for testing.
+	 * @author Erik
 	 */
 	public class TestingUtils 
 	{
@@ -23,6 +24,21 @@ package Test
 				trace(errorMessage);
 			
 			return allPass;	
+		}
+		
+		public static function CheckForError(func : Function, errorType : Class) : Boolean
+		{
+			try
+			{
+				func();
+			}
+			catch (exception : Error)
+			{
+				if (getQualifiedClassName(exception) == getQualifiedClassName(errorType))
+					return true;
+			}
+			
+			return false;
 		}
 		
 	}
