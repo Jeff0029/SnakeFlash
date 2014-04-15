@@ -1,6 +1,6 @@
 package Gameplay 
 {
-	import EntityComponent.Components.Transform;
+	import Engine.EntityComponent.Components.Transform;
 	import Gameplay.TileEnum;
 	/**
 	 * ...

@@ -1,4 +1,4 @@
-package EntityComponent.Components 
+package Engine.EntityComponent.Components 
 {
 	/**
 	 * A generic component to inherit from.

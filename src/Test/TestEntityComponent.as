@@ -1,8 +1,8 @@
 package Test 
 {
-	import EntityComponent.Components.IComponent;
-	import EntityComponent.Components.Transform;
-	import EntityComponent.GameObject;
+	import Engine.EntityComponent.Components.IComponent;
+	import Engine.EntityComponent.Components.Transform;
+	import Engine.EntityComponent.GameObject;
 	import MathLib.Vector2;
 	
 	/**

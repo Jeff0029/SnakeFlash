@@ -1,4 +1,4 @@
-package EntityComponent.Components 
+package Engine.EntityComponent.Components 
 {
 	import MathLib.Vector2;
 	/**

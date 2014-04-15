@@ -1,8 +1,8 @@
-package EntityComponent 
+package Engine.EntityComponent 
 {
-	import EntityComponent.Components.Component;
-	import EntityComponent.Components.IComponent;
-	import EntityComponent.Components.Transform;
+	import Engine.EntityComponent.Components.Component;
+	import Engine.EntityComponent.Components.IComponent;
+	import Engine.EntityComponent.Components.Transform;
 	import flash.utils.getQualifiedClassName;
 	/**
 	 * An entity for containing components.
