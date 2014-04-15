@@ -1,5 +1,6 @@
 package 
 {
+	import Engine.Graphics.TextureBank;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import Test.TestEntityComponent;
@@ -20,6 +21,7 @@ package
 			var tileSet:Tiles = new Tiles();
 			TestMath.TestMaths();
 			TestEntityComponent.TestEntityComponents();
+			TextureBank.Initialize();
 		}
 		
 		private function init(e:Event = null):void 
