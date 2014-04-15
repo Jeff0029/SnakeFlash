@@ -27,6 +27,8 @@ package Test
 		{
 			var go : GameObject = new GameObject();
 			
+			var parentGameObjectTest : Boolean = go.CTransform.ParentGameObject == go;
+			
 			var sameComponentTest : Boolean = TestingUtils.CheckForError(function() : void
 			{
 				go.AddComponent(new Transform());
@@ -49,11 +51,12 @@ package Test
 			var transform : Transform = Transform(go.GetComponent(Transform));
 			
 			var tests : Vector.<Boolean> = new Vector.<Boolean>();
+			tests.push(parentGameObjectTest);
 			tests.push(sameComponentTest);
 			tests.push(removeNonExistantComponentTest);
 			tests.push(getNonExistantComponentTest);
 			
-			return TestingUtils.CheckTests(tests, "Add / remove testing failed!");
+			return TestingUtils.CheckTests(tests, "Add / remove / get testing failed!");
 		}
 		
 		public static function TransformTest() : Boolean

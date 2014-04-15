@@ -19,7 +19,7 @@ package Engine.EntityComponent
 		public function GameObject() 
 		{
 			transform = new Transform();
-			components.push(transform);
+			AddComponent(transform);
 		}
 		
 		public function Start() : void
@@ -45,6 +45,7 @@ package Engine.EntityComponent
 			}
 			
 			components.push(toAdd);
+			Component(toAdd).ParentGameObject = this;
 		}
 		
 		public function RemoveComponent(toRemoveType : Class) : void

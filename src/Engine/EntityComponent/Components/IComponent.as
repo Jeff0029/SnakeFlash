@@ -1,5 +1,6 @@
 package Engine.EntityComponent.Components 
 {
+	import Engine.EntityComponent.GameObject;
 	
 	/**
 	 * Component interface.
@@ -7,6 +8,7 @@ package Engine.EntityComponent.Components
 	 */
 	public interface IComponent 
 	{
+		function get ParentGameObject() : GameObject;
 		function Start() : void;
 		function Update() : void;
 	}
