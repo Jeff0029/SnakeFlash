@@ -10,16 +10,11 @@ package Engine.Graphics
 	{
 		[Embed(source = "../../../Resources/Textures/Debug/TestTexture.png")]
 		private static var TestTexClass : Class;
-		private static var testTex : BitmapData;
+		public static var testTex : BitmapData = GetBitmapData(TestTexClass);
 		
-		public static function Initialize() : void
+		private static function GetBitmapData(data : Class) : BitmapData
 		{
-			testTex = GetBitmapData(new TestTexClass() as Bitmap);
-		}
-		
-		private static function GetBitmapData(data : Bitmap) : BitmapData
-		{
-			return data.bitmapData;
+			return (new data() as Bitmap).bitmapData;
 		}
 		
 		public function TextureBank() 
