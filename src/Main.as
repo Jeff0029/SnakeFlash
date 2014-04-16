@@ -1,6 +1,7 @@
 package 
 {
-	import Engine.EntityComponent.Components.Renderer;
+	import Engine.EntityComponent.Components.Animator;
+	import Engine.EntityComponent.Components.CellRenderer;
 	import Engine.Graphics.TextureBank;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -22,7 +23,8 @@ package
 			var tileSet:Tiles = new Tiles();
 			TestMath.TestMaths();
 			TestEntityComponent.TestEntityComponents();
-			var renderer : Renderer = new Renderer(TextureBank.testTex, this);
+			var renderer : CellRenderer = new CellRenderer(TextureBank.testAnimatedTex, this);
+			var anim : Animator = new Animator(4);
 		}
 		
 		private function init(e:Event = null):void 

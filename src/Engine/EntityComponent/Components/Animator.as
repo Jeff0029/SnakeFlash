@@ -1,0 +1,29 @@
+package Engine.EntityComponent.Components 
+{
+	import flash.geom.Rectangle;
+	/**
+	 * Animates an image based on a horizontal sprite sheet.
+	 * @author Erik
+	 */
+	public class Animator extends Component 
+	{
+		private const CELL_SIZE : int = 64;
+		
+		private var frameCount : int;
+		private var currentFrame : int = 0;
+		
+		private var cells : Vector.<Rectangle> = new Vector.<Rectangle>();
+		
+		public function Animator(frameCount : int) 
+		{
+			this.frameCount = frameCount;
+			
+			for (var i : int = 0; i < frameCount; i++)
+			{
+				cells.push(new Rectangle(i * CELL_SIZE, 0, CELL_SIZE, CELL_SIZE));
+			}
+		}
+		
+	}
+
+}

@@ -1,5 +1,6 @@
 package Engine.EntityComponent 
 {
+	import Engine.EntityComponent.Components.CellRenderer;
 	import Engine.EntityComponent.Components.Component;
 	import Engine.EntityComponent.Components.IComponent;
 	import Engine.EntityComponent.Components.Renderer;
@@ -15,6 +16,7 @@ package Engine.EntityComponent
 		private var transform : Transform;
 		
 		private const RENDERER_TYPE : String = getQualifiedClassName(Renderer);
+		private const CELL_RENDERER_TYPE : String = getQualifiedClassName(CellRenderer);
 		private var renderer : Renderer;
 		
 		private var components : Vector.<IComponent> = new Vector.<IComponent>();
@@ -55,7 +57,8 @@ package Engine.EntityComponent
 			switch (toAddType)
 			{
 				case TRANSFORM_TYPE: transform = Transform(toAdd); break;
-				case RENDERER_TYPE: renderer = Renderer(toAdd); break;
+				case RENDERER_TYPE:	// Fall through
+				case CELL_RENDERER_TYPE: renderer = Renderer(toAdd); break;
 			}
 		}
 		

@@ -9,13 +9,20 @@ package Engine.EntityComponent.Components
 	 */
 	public class Renderer extends Component 
 	{
-		private var sprite : Sprite;
+		protected var imageData : BitmapData;
+		protected var parent : Sprite;
+		protected var sprite : Sprite;
 		
 		public function Renderer(bitmap : BitmapData, parent : Sprite) 
 		{
+			imageData = bitmap;
+			this.parent = parent;
 			sprite = new Sprite();
-			sprite.addChild(new Bitmap(bitmap));
-			
+		}
+		
+		public override function Start() : void
+		{
+			sprite.addChild(new Bitmap(imageData));
 			parent.addChild(sprite);
 		}
 		
