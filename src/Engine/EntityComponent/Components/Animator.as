@@ -1,5 +1,6 @@
 package Engine.EntityComponent.Components 
 {
+	import Engine.EntityComponent.GameObject;
 	import flash.geom.Rectangle;
 	/**
 	 * Animates an image based on a horizontal sprite sheet.
@@ -13,6 +14,13 @@ package Engine.EntityComponent.Components
 		private var currentFrame : int = 0;
 		
 		private var cells : Vector.<Rectangle> = new Vector.<Rectangle>();
+		private var renderer : CellRenderer;
+		
+		public override function set ParentGameObject(value : GameObject) : void
+		{
+			gameObject = value;
+			renderer = gameObject.GetComponent(CellRenderer) as CellRenderer;
+		}
 		
 		public function Animator(frameCount : int) 
 		{
@@ -22,6 +30,11 @@ package Engine.EntityComponent.Components
 			{
 				cells.push(new Rectangle(i * CELL_SIZE, 0, CELL_SIZE, CELL_SIZE));
 			}
+		}
+		
+		public override function Update() : void
+		{
+			renderer.DisplaySubsection(cells[++currentFrame]);
 		}
 		
 	}

@@ -2,7 +2,9 @@ package
 {
 	import Engine.EntityComponent.Components.Animator;
 	import Engine.EntityComponent.Components.CellRenderer;
+	import Engine.EntityComponent.GameObject;
 	import Engine.Graphics.TextureBank;
+	import Engine.SceneGraph.SceneGraph;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import Test.TestEntityComponent;
@@ -23,8 +25,16 @@ package
 			var tileSet:Tiles = new Tiles();
 			TestMath.TestMaths();
 			TestEntityComponent.TestEntityComponents();
-			var renderer : CellRenderer = new CellRenderer(TextureBank.testAnimatedTex, this);
-			var anim : Animator = new Animator(4);
+			
+			var scene : SceneGraph = new SceneGraph();
+			
+			var goAnimTest : GameObject = new GameObject();
+			goAnimTest.AddComponent(new CellRenderer(TextureBank.testAnimatedTex, this));
+			goAnimTest.AddComponent(new Animator(4));
+			scene.Add(goAnimTest);
+			
+			scene.Start();
+			scene.Update();
 		}
 		
 		private function init(e:Event = null):void 
