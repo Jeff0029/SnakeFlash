@@ -28,7 +28,13 @@ package Engine.EntityComponent.Components
 		{
 			DisplaySubsection(CLEAR_RECT);
 			
-			sprite.addChild(new Bitmap(canvasData));
+			var childSprite : Sprite = new Sprite();
+			childSprite.addChild(new Bitmap(canvasData));
+			childSprite.x = -CELL_SIZE / 2;
+			childSprite.y = -CELL_SIZE / 2;
+			
+			sprite.addChild(childSprite);
+			
 			parent.addChild(sprite);
 		}
 		

@@ -7,6 +7,7 @@ package
 	import Engine.SceneGraph.SceneGraph;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import MathLib.Vector2;
 	import Test.TestEntityComponent;
 	import Test.TestMath;
 	import Gameplay.Tiles;
@@ -24,26 +25,51 @@ package
 		{
 			if (stage) init();
 			else addEventListener(Event.ADDED_TO_STAGE, init);
-			var tileSet:Tiles = new Tiles();
-			TestMath.TestMaths();
-			TestEntityComponent.TestEntityComponents();
-			
-			scene = new SceneGraph();
-			
-			var goAnimTest : GameObject = new GameObject();
-			goAnimTest.AddComponent(new CellRenderer(TextureBank.testAnimatedTex, this));
-			goAnimTest.AddComponent(new Animator(4));
-			scene.Add(goAnimTest);
-			
-			scene.Start();
-			
-			addEventListener(Event.ENTER_FRAME, UpdateLoop);
 		}
 		
 		private function init(e:Event = null):void 
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
+			
+			var tileSet:Tiles = new Tiles();
+			
+			RunTests();
+			
+			CreateSceneGraph();
+		}
+		
+		private function RunTests() : void
+		{
+			TestMath.TestMaths();
+			TestEntityComponent.TestEntityComponents();
+		}
+		
+		private function CreateSceneGraph() : void
+		{
+			scene = new SceneGraph();
+			
+			CreateGameObjects();
+			
+			scene.Start();
+			
+			addEventListener(Event.ENTER_FRAME, UpdateLoop);
+		}
+		
+		private function CreateGameObjects() : void
+		{
+			var goAnimTest : GameObject = new GameObject();
+			goAnimTest.AddComponent(new CellRenderer(TextureBank.testAnimatedTex, this));
+			goAnimTest.AddComponent(new Animator(4));
+			scene.Add(goAnimTest);
+			goAnimTest.CTransform.Translate(new Vector2(100, 100));
+			goAnimTest.CTransform.Rotate(-45);
+			
+			var goAnimTest2 : GameObject = new GameObject();
+			goAnimTest2.AddComponent(new CellRenderer(TextureBank.testAnimatedTex, this));
+			goAnimTest2.AddComponent(new Animator(4));
+			scene.Add(goAnimTest2);
+			goAnimTest2.CTransform.Translate(new Vector2(80, 80));
 		}
 		
 		private function UpdateLoop(e:Event) : void
