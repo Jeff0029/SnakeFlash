@@ -34,7 +34,7 @@ package Engine.EntityComponent.Components
 		
 		internal function DisplaySubsection(rect : Rectangle) : void
 		{
-			canvasData.fillRect(CLEAR_RECT, 0xFFFFFFFF);
+			canvasData.fillRect(CLEAR_RECT, 0x00FFFFFF);
 			canvasData.copyPixels(imageData, rect, ZERO_POINT, null, null, true);
 		}
 		

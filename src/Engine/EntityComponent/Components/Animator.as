@@ -34,7 +34,9 @@ package Engine.EntityComponent.Components
 		
 		public override function Update() : void
 		{
-			renderer.DisplaySubsection(cells[++currentFrame]);
+			currentFrame = (currentFrame + 1) % frameCount;
+			
+			renderer.DisplaySubsection(cells[currentFrame]);
 		}
 		
 	}
