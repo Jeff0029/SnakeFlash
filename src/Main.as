@@ -50,6 +50,7 @@ package
 			scene = new SceneGraph();
 			
 			CreateGameObjects();
+			CreateTestGameObjects();
 			
 			scene.Start();
 			
@@ -57,6 +58,10 @@ package
 		}
 		
 		private function CreateGameObjects() : void
+		{
+		}
+		
+		private function CreateTestGameObjects() : void
 		{
 			var goAnimTest : GameObject = new GameObject();
 			goAnimTest.AddComponent(new CellRenderer(TextureBank.testAnimatedTex, this));
