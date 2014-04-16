@@ -2,6 +2,7 @@ package Engine.EntityComponent
 {
 	import Engine.EntityComponent.Components.Component;
 	import Engine.EntityComponent.Components.IComponent;
+	import Engine.EntityComponent.Components.Renderer;
 	import Engine.EntityComponent.Components.Transform;
 	import flash.utils.getQualifiedClassName;
 	/**
@@ -9,17 +10,21 @@ package Engine.EntityComponent
 	 * @author Erik
 	 */
 	public class GameObject 
-	{	
+	{
+		private const TRANSFORM_TYPE : String = getQualifiedClassName(Transform);
 		private var transform : Transform;
+		
+		private const RENDERER_TYPE : String = getQualifiedClassName(Renderer);
+		private var renderer : Renderer;
 		
 		private var components : Vector.<IComponent> = new Vector.<IComponent>();
 		
 		public function get CTransform() : Transform { return transform; }
+		public function get CRenderer() : Renderer { return renderer; }
 		
 		public function GameObject() 
 		{
-			transform = new Transform();
-			AddComponent(transform);
+			AddComponent(new Transform());
 		}
 		
 		public function Start() : void
@@ -46,6 +51,12 @@ package Engine.EntityComponent
 			
 			components.push(toAdd);
 			Component(toAdd).ParentGameObject = this;
+			
+			switch (toAddType)
+			{
+				case TRANSFORM_TYPE: transform = Transform(toAdd); break;
+				case RENDERER_TYPE: renderer = Renderer(toAdd); break;
+			}
 		}
 		
 		public function RemoveComponent(toRemoveType : Class) : void
