@@ -7,7 +7,7 @@ package Engine.EntityComponent.Components
 	 */
 	public class Component implements IComponent
 	{
-		private var gameObject : GameObject;
+		protected var gameObject : GameObject;
 		public function get ParentGameObject() : GameObject { return gameObject; }
 		public function set ParentGameObject(value : GameObject) : void { gameObject = value; }
 		
