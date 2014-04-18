@@ -19,10 +19,11 @@ package
 		{
 			if (stage) init();
 			else addEventListener(Event.ADDED_TO_STAGE, init);
-			var tileSet:Tiles = new Tiles();
+			
 			TestMath.TestMaths();
 			TestEntityComponent.TestEntityComponents();
-			var renderer : Renderer = new Renderer(TextureBank.testTex, this);
+			var tileSet:Tiles = new Tiles();
+			var tiles:Renderer = new Renderer(TextureBank.backgroundTex, this);
 		}
 		
 		private function init(e:Event = null):void 

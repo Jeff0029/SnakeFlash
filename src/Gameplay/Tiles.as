@@ -1,6 +1,8 @@
 package Gameplay 
 {
 	import Engine.EntityComponent.Components.Transform;
+	import Engine.EntityComponent.Components.Renderer;
+	import Engine.Graphics.TextureBank;
 	import Gameplay.Tile;
 	import MathLib.Vector2;
 	/**
@@ -26,7 +28,7 @@ package Gameplay
 				tiles.push(new Array());
 				for (var j:int = 0; j < COLUMN; j++) 
 				{
-					//fillValue.position = new Vector2(fillValue.width * j, fillValue.height * i);
+					fillValue.CTransform.Position = new Vector2(fillValue.width * j, fillValue.height * i);
 					fillValue.tileEnum = TileEnum.empty;
 					tiles[i].push(fillValue);
 				}
