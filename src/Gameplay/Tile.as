@@ -8,15 +8,15 @@ package Gameplay
 	 * @author ...
 	 */
 	 
-	public class Tile extends GameObject
+	public class Tile extends Component
 	{
 		public var tileEnum:TileEnum;
-		public var width:Number = 64;
-		public var height:Number = 64;
+		public static const WIDTH:Number = 64;
+		public static const HEIGHT:Number = 64;
 		
-		public function Tile() 
+		public function Tile(tileEnum:TileEnum) 
 		{
-			
+			this.tileEnum = tileEnum;
 		}
 		
 	}

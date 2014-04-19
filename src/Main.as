@@ -2,6 +2,10 @@ package
 {
 	import Engine.EntityComponent.Components.Animator;
 	import Engine.EntityComponent.Components.CellRenderer;
+	import Engine.EntityComponent.Components.Renderer;
+	import flash.display.StageScaleMode;
+	import flash.display.StageAlign;
+	import Gameplay.Food;
 	import Engine.EntityComponent.GameObject;
 	import Engine.Graphics.TextureBank;
 	import Engine.SceneGraph.SceneGraph;
@@ -32,6 +36,10 @@ package
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
 			
+			//Set the window position and scale type
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.align = StageAlign.TOP_LEFT;
+			
 			var tileSet:Tiles = new Tiles();
 			
 			RunTests();
@@ -59,8 +67,20 @@ package
 		
 		private function CreateGameObjects() : void
 		{
+			// ADD BACKGROUND
+			var BackgroundGO:GameObject = new GameObject();
+			BackgroundGO.AddComponent(new Renderer(TextureBank.backgroundTex, this));
+			//BackgroundGO.CTransform.Translate(new Vector2(this.width / 2, this.height / 2));
+			BackgroundGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/2));
+			scene.Add(BackgroundGO);
+			
+			// ADD FOOD
+			var FoodGO:Food = new Food();
+			FoodGO.AddComponent(new CellRenderer(TextureBank.foodTexClass, this));
+			FoodGO.AddComponent(new Animator(5));
+			scene.Add(FoodGO);
+			
 		}
-		
 		private function CreateTestGameObjects() : void
 		{
 			var goAnimTest : GameObject = new GameObject();

@@ -2,6 +2,7 @@ package Gameplay
 {
 	import Engine.EntityComponent.Components.Transform;
 	import Engine.EntityComponent.Components.Renderer;
+	import Engine.EntityComponent.GameObject;
 	import Engine.Graphics.TextureBank;
 	import Gameplay.Tile;
 	import MathLib.Vector2;
@@ -11,10 +12,9 @@ package Gameplay
 	 */
 	public class Tiles
 	{
-		private const COLUMN:uint = 15;
-		private const ROWS:uint = 10;
-		private var fillValue:Tile = new Tile();
-		private var tiles:Array = new Array();
+		public static const COLUMNS:uint = 15;
+		public static const ROWS:uint = 10;
+		public static var tiles:Array = new Array();
 		
 		public function Tiles() 
 		{
@@ -26,10 +26,11 @@ package Gameplay
 			for (var i:int = 0; i < ROWS; i++) 
 			{
 				tiles.push(new Array());
-				for (var j:int = 0; j < COLUMN; j++) 
+				for (var j:int = 0; j < COLUMNS; j++) 
 				{
-					fillValue.CTransform.Position = new Vector2(fillValue.width * j, fillValue.height * i);
-					fillValue.tileEnum = TileEnum.empty;
+					var fillValue:GameObject = new GameObject();
+					fillValue.AddComponent(new Tile(TileEnum.empty));
+					fillValue.CTransform.Position = new Vector2(Tile.WIDTH * j, Tile.HEIGHT * i);
 					tiles[i].push(fillValue);
 				}
 			}
