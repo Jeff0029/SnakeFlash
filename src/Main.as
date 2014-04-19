@@ -6,11 +6,13 @@ package
 	import flash.display.StageScaleMode;
 	import flash.display.StageAlign;
 	import Gameplay.Food;
+	import Input.InputKeyManager;
 	import Engine.EntityComponent.GameObject;
 	import Engine.Graphics.TextureBank;
 	import Engine.SceneGraph.SceneGraph;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import Gameplay.Snake;
 	import MathLib.Vector2;
 	import Test.TestEntityComponent;
 	import Test.TestMath;
@@ -41,7 +43,7 @@ package
 			stage.align = StageAlign.TOP_LEFT;
 			
 			var tileSet:Tiles = new Tiles();
-			
+			InputKeyManager.Init(this);
 			RunTests();
 			
 			CreateSceneGraph();
@@ -80,6 +82,9 @@ package
 			FoodGO.AddComponent(new Animator(5));
 			scene.Add(FoodGO);
 			
+			var SnakeGO:GameObject = new GameObject();
+			SnakeGO.AddComponent(new Snake());
+			scene.Add(SnakeGO);
 		}
 		private function CreateTestGameObjects() : void
 		{
