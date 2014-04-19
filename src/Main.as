@@ -20,10 +20,11 @@ package
 	 * ...
 	 * @author Erik Uggeldahl, Jean-Francois Vienneau, Nicholas Belanger Theil
 	 */
-	[SWF(width=960, height=640, frameRate=8, backgroundColor=0xE2E2E2)]
+	[SWF(width=960, height=640, frameRate=24, backgroundColor=0xE2E2E2)]
 	public class Main extends Sprite 
 	{
 		private var scene : SceneGraph;
+		private var updateLimiter : int = 0;
 		
 		public function Main():void 
 		{
@@ -99,7 +100,11 @@ package
 		
 		private function UpdateLoop(e:Event) : void
 		{
-			scene.Update();
+			// Update every third frame, i.e. 8 frames per second.
+			updateLimiter++;
+			updateLimiter %= 3;
+			if (updateLimiter == 0)
+				scene.Update();
 		}
 		
 	}
