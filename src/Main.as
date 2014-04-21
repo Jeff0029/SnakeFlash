@@ -62,7 +62,6 @@ package
 			
 			CreateGameObjects();
 			//CreateTestGameObjects();
-			scene.Start();
 			
 			addEventListener(Event.ENTER_FRAME, UpdateLoop);
 		}

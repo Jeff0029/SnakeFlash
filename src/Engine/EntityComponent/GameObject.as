@@ -6,6 +6,7 @@ package Engine.EntityComponent
 	import Engine.EntityComponent.Components.Renderer;
 	import Engine.EntityComponent.Components.Transform;
 	import flash.utils.getQualifiedClassName;
+	import MathLib.Vector2;
 	/**
 	 * An entity for containing components.
 	 * @author Erik
@@ -20,6 +21,7 @@ package Engine.EntityComponent
 		private var renderer : Renderer;
 		
 		private var components : Vector.<IComponent> = new Vector.<IComponent>();
+		private var newComponents : Vector.<IComponent> = new Vector.<IComponent>();
 		
 		public function get CTransform() : Transform { return transform; }
 		public function get CRenderer() : Renderer { return renderer; }
@@ -29,14 +31,11 @@ package Engine.EntityComponent
 			AddComponent(new Transform());
 		}
 		
-		public function Start() : void
-		{
-			for each (var component : IComponent in components)
-				component.Start();
-		}
-		
 		public function Update() : void
 		{
+			for (var i : int = 0; i < newComponents.length; i++)
+				newComponents.pop().Start();
+			
 			for each (var component : IComponent in components)
 				component.Update();
 		}
@@ -52,8 +51,8 @@ package Engine.EntityComponent
 			}
 			
 			components.push(toAdd);
+			newComponents.push(toAdd);
 			Component(toAdd).ParentGameObject = this;
-			toAdd.Start();
 			
 			switch (toAddType)
 			{
