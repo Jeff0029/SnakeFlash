@@ -9,9 +9,9 @@ package Engine.EntityComponent.Components
 	 */
 	public class Renderer extends Component 
 	{
-		protected var imageData : BitmapData;
+		public var imageData : BitmapData;
 		protected var parent : Sprite;
-		protected var sprite : Sprite;
+		public var sprite : Sprite;
 		
 		public function Renderer(bitmap : BitmapData, parent : Sprite) 
 		{

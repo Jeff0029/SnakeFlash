@@ -6,6 +6,8 @@ package Gameplay
 	import Engine.EntityComponent.Components.Component;
 	import Engine.EntityComponent.GameObject;
 	import Engine.EntityComponent.GameObjectNode;
+	import flash.display.BitmapData;
+	import flash.events.MouseEvent;
 	import Gameplay.DirectionEnum;
 	import Engine.EntityComponent.GameObjectList;
 	import Input.InputKeyManager;
@@ -32,14 +34,7 @@ package Gameplay
 			direction = DirectionEnum.right;
 			for (var i:int = 0; i < STARTING_SIZE; i++) 
 			{
-				snakeList.Add(PooledSnake.Create() as GameObjectNode);
-				snakeList.head.gameObject = new GameObject();
-				snakeList.head.gameObject.CTransform.Position = GiveTilePosition(i, 0);
-				Tiles.SetTileState(i, 0, TileEnum.snakePart);
-				snakeList.head.gameObject.AddComponent(new SnakePart(i, 0));
-				snakeList.head.gameObject.AddComponent(new CellRenderer(TextureBank.snakeUpFirstTexClass, main));
-				snakeList.head.gameObject.AddComponent(new Animator(5));
-				main.scene.Add(snakeList.head.gameObject);
+				Grow(new Vector2(i, 0));
 			}	
 		}
 		
@@ -88,26 +83,25 @@ package Gameplay
 				{
 					Tiles.SetTileState(newPos.X, newPos.Y, TileEnum.empty);
 					main.FoodGO.SetFood();
-					grow();
+					Grow(GetSnakePartCoord(snakeList.head.gameObject));
+					moveWholeSnake(newPos.X, newPos.Y, snakeList);
 					trace("FOOOD");
 				}
 				else
 				{
 					moveWholeSnake(newPos.X, newPos.Y, snakeList);
-				}
-				snakeList.UpdateAll();			
+				}	
 			}
 		}
 		
-		function grow()
+		function Grow(position:Vector2)
 		{
-			var position:Vector2 = GetSnakePartCoord(snakeList.head.gameObject);
 			snakeList.Add(PooledSnake.Create() as GameObjectNode);
 			snakeList.head.gameObject = new GameObject();
 			snakeList.head.gameObject.CTransform.Position = GiveTilePosition(position.X, position.Y);
 			Tiles.SetTileState(position.X, position.Y, TileEnum.snakePart);
 			snakeList.head.gameObject.AddComponent(new SnakePart(position.X, position.Y));
-			snakeList.head.gameObject.AddComponent(new CellRenderer(TextureBank.testAnimatedTex, main));
+			snakeList.head.gameObject.AddComponent(new CellRenderer(TextureBank.snakeStraightUpTex, main));
 			snakeList.head.gameObject.AddComponent(new Animator(5));
 			main.scene.Add(snakeList.head.gameObject);
 		}
@@ -155,10 +149,38 @@ package Gameplay
 		
 		function YouLost()
 		{
-			var GameOver:GameObject = new GameObject();
-			GameOver.AddComponent(new Renderer(TextureBank.testTex, main));
-			GameOver.CTransform.Translate(new Vector2(64, 64));
-			main.scene.Add(GameOver);
+			var GameOverTextGO:GameObject = new GameObject();
+			GameOverTextGO.AddComponent(new Renderer(TextureBank.gameOverTitleTex, main));
+			GameOverTextGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3));
+			main.scene.Add(GameOverTextGO);
+			
+			var GameOverRetryGO:GameObject = new GameObject();
+			GameOverRetryGO.AddComponent(new Renderer(TextureBank.gameOverRetryTex, main));
+			GameOverRetryGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3 + TextureBank.gameOverTitleTex.height));
+			main.scene.Add(GameOverRetryGO);
+			
+			var GameOverExitGO:GameObject = new GameObject();
+			GameOverExitGO.AddComponent(new Renderer(TextureBank.gameOverExitTex, main));
+			GameOverExitGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3 + TextureBank.gameOverTitleTex.height + TextureBank.gameOverRetryTex.height));
+			main.scene.Add(GameOverExitGO);
+			
+			(GameOverRetryGO.CRenderer.sprite.addEventListener(MouseEvent.MOUSE_OVER, OnMouseOver(GameOverRetryGO, TextureBank.gameOverRetrySelectedTex)));
+			(GameOverRetryGO.CRenderer.sprite.addEventListener(MouseEvent.MOUSE_OUT, OnMouseOver(GameOverRetryGO, TextureBank.gameOverRetryTex)));
+			
+			(GameOverExitGO.CRenderer.sprite.addEventListener(MouseEvent.MOUSE_OVER, OnMouseOver(GameOverExitGO, TextureBank.gameOverExitSelectedTex)));
+			(GameOverExitGO.CRenderer.sprite.addEventListener(MouseEvent.MOUSE_OUT, OnMouseOver(GameOverExitGO, TextureBank.gameOverExitTex)));
+			
+			
+		}
+		
+		function OnMouseOver(gameObjectHover:GameObject, texture:BitmapData):Function
+		{
+			return function(e:MouseEvent):void 
+			{
+				gameObjectHover.CRenderer.imageData = texture;
+				gameObjectHover.CRenderer.Start();
+			}
+			
 		}
 		
 		function GiveTilePosition(x:int, y:int):Vector2
