@@ -53,6 +53,7 @@ package Engine.EntityComponent
 			
 			components.push(toAdd);
 			Component(toAdd).ParentGameObject = this;
+			toAdd.Start();
 			
 			switch (toAddType)
 			{
