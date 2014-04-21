@@ -56,6 +56,10 @@ package Engine.Graphics
 		private static var GameOverExitSelectedTexClass : Class;
 		public static var gameOverExitSelectedTex : BitmapData = GetBitmapData(GameOverExitSelectedTexClass);
 		
+		[Embed(source = "../../../Resources/Textures/Menu/MainMenu_Title.png")]
+		private static var MainMenuTitleTexClass : Class;
+		public static var mainMenuTitleTex : BitmapData = GetBitmapData(MainMenuTitleTexClass);
+		
 		private static function GetBitmapData(data : Class) : BitmapData
 		{
 			return (new data() as Bitmap).bitmapData;

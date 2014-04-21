@@ -32,6 +32,11 @@ package Gameplay
 		private var main:Main;
 		var isDead:Boolean = false;
 		static var dispatch:EventDispatcher = new EventDispatcher();
+		
+		var GameOverExitGO:GameObject;
+		var GameOverRetryGO:GameObject;
+		var GameOverTextGO:GameObject
+		
 		public function Snake(main:Main) 
 		{
 			isDead = false;
@@ -114,6 +119,8 @@ package Gameplay
 		function Reset(event:CustomEvent):void 
 		{
 			trace("Reset");
+			//REMOVE TEXT
+			//RECYCLE SNAKE
 		}
 		
 		function GetSnakePartCoord(snakePart:GameObject):Vector2
@@ -159,17 +166,17 @@ package Gameplay
 		
 		function YouLost()
 		{
-			var GameOverTextGO:GameObject = new GameObject();
+			GameOverTextGO = new GameObject();
 			GameOverTextGO.AddComponent(new Renderer(TextureBank.gameOverTitleTex, main));
 			GameOverTextGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3));
 			main.scene.Add(GameOverTextGO);
 			
-			var GameOverRetryGO:GameObject = new GameObject();
+			GameOverRetryGO = new GameObject();
 			GameOverRetryGO.AddComponent(new Renderer(TextureBank.gameOverRetryTex, main));
 			GameOverRetryGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3 + TextureBank.gameOverTitleTex.height));
 			main.scene.Add(GameOverRetryGO);
 			
-			var GameOverExitGO:GameObject = new GameObject();
+			GameOverExitGO = new GameObject();
 			GameOverExitGO.AddComponent(new Renderer(TextureBank.gameOverExitTex, main));
 			GameOverExitGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3 + TextureBank.gameOverTitleTex.height + TextureBank.gameOverRetryTex.height));
 			main.scene.Add(GameOverExitGO);

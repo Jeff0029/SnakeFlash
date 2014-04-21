@@ -26,7 +26,6 @@ package Engine.SceneGraph
 		{
 			gameObjects.push(go);
 		}
-		
 	}
 
 }

@@ -61,6 +61,7 @@ package
 		{
 			scene = new SceneGraph();
 			
+			DisplayMainMenu();
 			CreateGameObjects();
 			//CreateTestGameObjects();
 			
@@ -99,6 +100,14 @@ package
 			goAnimTest2.AddComponent(new Animator(4));
 			scene.Add(goAnimTest2);
 			goAnimTest2.CTransform.Translate(new Vector2(80, 80));
+		}
+		
+		private function DisplayMainMenu()
+		{
+			var menuTitleGO:GameObject = new GameObject();
+			menuTitleGO.AddComponent(new Renderer(TextureBank.mainMenuTitleTex, this));
+			menuTitleGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3));
+			scene.Add(menuTitleGO);
 		}
 		
 		private function UpdateLoop(e:Event) : void
