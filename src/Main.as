@@ -120,7 +120,7 @@ package
 		private function DisplayMainMenu()
 		{
 			var menuTitleGO:GameObject = new GameObject();
-			menuTitleGO.AddComponent(new Renderer(TextureBank.mainMenuTitleTex, this));
+			menuTitleGO.AddComponent(new StaticRenderer(TextureBank.mainMenuTitleTex, this));
 			menuTitleGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3));
 			scene.Add(menuTitleGO);
 		}
