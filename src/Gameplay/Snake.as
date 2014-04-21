@@ -7,16 +7,20 @@ package Gameplay
 	import Engine.EntityComponent.GameObject;
 	import Engine.EntityComponent.GameObjectNode;
 	import flash.display.BitmapData;
+	import flash.display.Sprite;
+	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import Gameplay.DirectionEnum;
 	import Engine.EntityComponent.GameObjectList;
 	import Input.InputKeyManager;
 	import Gameplay.PooledSnake;
 	import Engine.Graphics.TextureBank;
+	import flash.events.Event;
 	import MathLib.Vector2;
+	import flash.system.System;
 	/**
 	 * ...
-	 * @author ...
+	 * @author Jean-Francois Vienneau
 	 */
 	public class Snake extends Component
 	{
@@ -27,6 +31,7 @@ package Gameplay
 		var newPos:Vector2 = Vector2.Zero;
 		private var main:Main;
 		var isDead:Boolean = false;
+		static var dispatch:EventDispatcher = new EventDispatcher();
 		public function Snake(main:Main) 
 		{
 			isDead = false;
@@ -53,22 +58,22 @@ package Gameplay
 				
 				switch(direction)
 				{
-						case DirectionEnum.up:
+					case DirectionEnum.up:
 						newPos = new Vector2(GetSnakePartCoord(snakeList.head.gameObject).X, 
 						GetSnakePartCoord(snakeList.head.gameObject).Y - 1);
-					break;
-						case DirectionEnum.down:
+						break;
+					case DirectionEnum.down:
 						newPos = new Vector2(GetSnakePartCoord(snakeList.head.gameObject).X, 
 						GetSnakePartCoord(snakeList.head.gameObject).Y + 1);
-					break;
-						case DirectionEnum.left:
+						break;
+					case DirectionEnum.left:
 						newPos = new Vector2(GetSnakePartCoord(snakeList.head.gameObject).X - 1, 
 						GetSnakePartCoord(snakeList.head.gameObject).Y);
-					break;
-						case DirectionEnum.right:
+						break;
+					case DirectionEnum.right:
 						newPos = new Vector2(GetSnakePartCoord(snakeList.head.gameObject).X + 1, 
 						GetSnakePartCoord(snakeList.head.gameObject).Y);
-					break;
+						break;
 				}
 				
 				// check if the movement is out of bound or collided with ourself
@@ -84,12 +89,12 @@ package Gameplay
 					Tiles.SetTileState(newPos.X, newPos.Y, TileEnum.empty);
 					main.FoodGO.SetFood();
 					Grow(GetSnakePartCoord(snakeList.head.gameObject));
-					moveWholeSnake(newPos.X, newPos.Y, snakeList);
+					MoveWholeSnake(newPos.X, newPos.Y, snakeList);
 					trace("FOOOD");
 				}
 				else
 				{
-					moveWholeSnake(newPos.X, newPos.Y, snakeList);
+					MoveWholeSnake(newPos.X, newPos.Y, snakeList);
 				}	
 			}
 		}
@@ -106,6 +111,11 @@ package Gameplay
 			main.scene.Add(snakeList.head.gameObject);
 		}
 		
+		function Reset(event:CustomEvent):void 
+		{
+			trace("Reset");
+		}
+		
 		function GetSnakePartCoord(snakePart:GameObject):Vector2
 		{
 			return new Vector2((snakePart.GetComponent(SnakePart) as SnakePart).tilePosX, (snakePart.GetComponent(SnakePart) as SnakePart).tilePosY);
@@ -117,20 +127,20 @@ package Gameplay
 			(snakePart.GetComponent(SnakePart) as SnakePart).tilePosY = coord.Y;
 		}
 		
-		function moveHead(x:int, y:int, head:GameObjectNode)
+		function MoveSnakePart(x:int, y:int, head:GameObjectNode)
 		{
 			SetSnakePartCoord(head.gameObject, new Vector2(x, y));
 			head.gameObject.CTransform.Position = GiveTilePosition(x, y);
 		}
 		
-		function moveWholeSnake(x:int, y:int, objsToMove:GameObjectList)
+		function MoveWholeSnake(x:int, y:int, objsToMove:GameObjectList)
 		{
 			var currentObj: GameObjectNode = objsToMove.head;
 			var lastPos:Vector2 = currentObj.gameObject.CTransform.Position;
 			var lastCoord:Vector2 = GetSnakePartCoord(currentObj.gameObject);
 			
 			// Move first
-			moveHead(x, y, objsToMove.head);
+			MoveSnakePart(x, y, objsToMove.head);
 			var tempCoord:Vector2;
 			// Move all but first
 			for (var i:int = 0; i < objsToMove.count-1; i++)
@@ -164,23 +174,46 @@ package Gameplay
 			GameOverExitGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3 + TextureBank.gameOverTitleTex.height + TextureBank.gameOverRetryTex.height));
 			main.scene.Add(GameOverExitGO);
 			
-			(GameOverRetryGO.CRenderer.sprite.addEventListener(MouseEvent.MOUSE_OVER, OnMouseOver(GameOverRetryGO, TextureBank.gameOverRetrySelectedTex)));
-			(GameOverRetryGO.CRenderer.sprite.addEventListener(MouseEvent.MOUSE_OUT, OnMouseOver(GameOverRetryGO, TextureBank.gameOverRetryTex)));
+			dispatch.addEventListener(CustomEvent.RESET, Reset);
 			
-			(GameOverExitGO.CRenderer.sprite.addEventListener(MouseEvent.MOUSE_OVER, OnMouseOver(GameOverExitGO, TextureBank.gameOverExitSelectedTex)));
-			(GameOverExitGO.CRenderer.sprite.addEventListener(MouseEvent.MOUSE_OUT, OnMouseOver(GameOverExitGO, TextureBank.gameOverExitTex)));
+			var gameOverRetrySprite:Sprite = GameOverRetryGO.CRenderer.sprite;
+			gameOverRetrySprite.addEventListener(MouseEvent.ROLL_OVER, ChangeButtonState(GameOverRetryGO, TextureBank.gameOverRetrySelectedTex, InputEnum.retry));
+			gameOverRetrySprite.addEventListener(MouseEvent.ROLL_OUT, ChangeButtonState(GameOverRetryGO, TextureBank.gameOverRetryTex, InputEnum.none));
+			
+			var gameOverExitSprite:Sprite = GameOverExitGO.CRenderer.sprite;
+			gameOverExitSprite.addEventListener(MouseEvent.ROLL_OVER, ChangeButtonState(GameOverExitGO, TextureBank.gameOverExitSelectedTex, InputEnum.exit));
+			gameOverExitSprite.addEventListener(MouseEvent.ROLL_OUT, ChangeButtonState(GameOverExitGO, TextureBank.gameOverExitTex, InputEnum.none));
 			
 			
 		}
 		
-		function OnMouseOver(gameObjectHover:GameObject, texture:BitmapData):Function
+		static function ChangeButtonState(gameObjectHover:GameObject, texture:BitmapData, inputType:InputEnum):Function
 		{
 			return function(e:MouseEvent):void 
 			{
 				gameObjectHover.CRenderer.imageData = texture;
 				gameObjectHover.CRenderer.Start();
+				if (inputType != InputEnum.none)
+					gameObjectHover.CRenderer.sprite.addEventListener(MouseEvent.CLICK, ListenForInput(inputType));
+				else
+					gameObjectHover.CRenderer.sprite.removeEventListener(MouseEvent.CLICK, ListenForInput(inputType));
 			}
-			
+		}
+		
+		static function ListenForInput(InputType:InputEnum):Function
+		{
+			return function(e:MouseEvent):void
+			{
+				switch(InputType)
+				{
+					case InputEnum.exit:
+						System.exit(0);
+						break;
+					case InputEnum.retry:
+						dispatch.dispatchEvent(new CustomEvent("Reset"))
+						break;
+				}
+			}
 		}
 		
 		function GiveTilePosition(x:int, y:int):Vector2
