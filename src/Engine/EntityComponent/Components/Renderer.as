@@ -32,6 +32,11 @@ package Engine.EntityComponent.Components
 			sprite.addEventListener(event, listener);
 		}
 		
+		public function RemoveEventListener(event : String, listener : Function)
+		{
+			sprite.removeEventListener(event, listener);
+		}
+		
 		protected function CreateChildSprite(imageData : BitmapData) : Sprite
 		{
 			var childSprite : Sprite = new Sprite();

@@ -32,6 +32,7 @@ package
 		public var scene : SceneGraph;
 		private var updateLimiter : int = 0;
 		public var FoodGO:Food;
+		
 		public function Main():void 
 		{
 			if (stage) init();
