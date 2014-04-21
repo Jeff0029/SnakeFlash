@@ -114,12 +114,27 @@ package Gameplay
 			main.scene.Add(snakeList.head.gameObject);
 		}
 		
+		function Shrink(amount:int)
+		{
+			for (var i:int = 0; i < amount; i++)
+			{
+				snakeList.head.gameObject.CRenderer.SetVisible(false);
+				Tiles.SetTileState(GetSnakePartCoord(snakeList.head.gameObject).X, GetSnakePartCoord(snakeList.head.gameObject).Y, TileEnum.empty);
+				(snakeList.head as PooledSnake).Recycle();
+				(snakeList.head as PooledSnake).RemoveFromList();
+			}
+		}
+		
 		function Reset(event:CustomEvent):void 
 		{
 			trace("Reset");
 			GameOverTextGO.CRenderer.SetVisible(false);
 			GameOverRetryGO.CRenderer.SetVisible(false);
 			GameOverExitGO.CRenderer.SetVisible(false);
+			isDead = false;
+			direction = DirectionEnum.right;
+			Shrink(snakeList.count - STARTING_SIZE);
+			MoveWholeSnake(0, 0, snakeList);
 		}
 		
 		function GetSnakePartCoord(snakePart:GameObject):Vector2
@@ -164,12 +179,7 @@ package Gameplay
 		}
 		
 		function YouLost()
-		{
-			//var GameOver:GameObject = new GameObject();
-			//GameOver.AddComponent(new StaticRenderer(TextureBank.testTex, main));
-			//GameOver.CTransform.Translate(new Vector2(64, 64));
-			//main.scene.Add(GameOver);
-			
+		{		
 			GameOverTextGO = new GameObject();
 			GameOverTextGO.AddComponent(new StaticRenderer(TextureBank.gameOverTitleTex, main));
 			GameOverTextGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3));
