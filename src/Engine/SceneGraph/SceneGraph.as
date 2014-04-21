@@ -14,14 +14,6 @@ package Engine.SceneGraph
 			gameObjects = new Vector.<GameObject>();
 		}
 		
-		public function Start() : void
-		{
-			for each (var gameObject : GameObject in gameObjects)
-			{
-				gameObject.Start();
-			}
-		}
-		
 		public function Update() : void
 		{
 			for each (var gameObject : GameObject in gameObjects)
