@@ -30,6 +30,7 @@ package Gameplay
 		var direction:DirectionEnum = new DirectionEnum();
 		var snakeList:GameObjectList = new GameObjectList();
 		var newPos:Vector2 = Vector2.Zero;
+
 		private var main:Main;
 		var isDead:Boolean = false;
 		var GameOverTextGO:GameObject;
@@ -82,18 +83,18 @@ package Gameplay
 				// check if the movement is out of bound or collided with ourself
 				if (newPos.X < 0 || newPos.X >= Tiles.COLUMNS || newPos.Y < 0 || newPos.Y >= Tiles.ROWS || Tiles.GetTileState(newPos.X, newPos.Y) == TileEnum.snakePart)
 				{
-					trace("YOU LOOSE");
+					Main.dispatch.dispatchEvent(new CustomEvent("GameOver"));
 					YouLost();
 					isDead = true;
 					return;
 				}
 				if (Tiles.GetTileState(newPos.X, newPos.Y) == TileEnum.snakeFood)
 				{
+					Main.dispatch.dispatchEvent(new CustomEvent("Score"));
 					Tiles.SetTileState(newPos.X, newPos.Y, TileEnum.empty);
 					main.FoodGO.SetFood();
 					Grow(GetSnakePartCoord(snakeList.head.gameObject));
 					MoveWholeSnake(newPos.X, newPos.Y, snakeList);
-					trace("FOOOD");
 				}
 				else
 				{
@@ -127,7 +128,6 @@ package Gameplay
 		
 		function Reset(event:CustomEvent):void 
 		{
-			trace("Reset");
 			GameOverTextGO.CRenderer.SetVisible(false);
 			GameOverRetryGO.CRenderer.SetVisible(false);
 			GameOverExitGO.CRenderer.SetVisible(false);

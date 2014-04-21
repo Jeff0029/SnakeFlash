@@ -6,8 +6,15 @@ package
 	import Engine.EntityComponent.Components.Renderer;
 	import Engine.EntityComponent.Components.StaticRenderer;
 	import flash.display.BitmapData;
+	import Engine.Graphics.FontBank;
 	import flash.display.StageScaleMode;
 	import flash.display.StageAlign;
+	import flash.text.TextField;
+	import flash.text.TextFormat;
+	import flash.text.TextFieldAutoSize;
+	import flashx.textLayout.elements.*;
+	import flashx.textLayout.formats.*;
+	import flash.text.Font;
 	import Gameplay.Food;
 	import Input.InputKeyManager;
 	import Engine.EntityComponent.GameObject;
@@ -38,6 +45,10 @@ package
 		private var updateLimiter : int = 0;
 		public var FoodGO:Food;
 		public static var dispatch:EventDispatcher = new EventDispatcher();
+		var scoreText:TextField = new TextField();
+		var scoreTextFormat:TextFormat = new TextFormat();
+		var scoreFont:Font = new Font();
+		var score:int = 0;
 		
 		var menuTitleGO:GameObject;
 		var menuPlayGO:GameObject;
@@ -58,7 +69,7 @@ package
 			//Set the window position and scale type
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
-			
+			SetupScoreFont();
 			var tileSet:Tiles = new Tiles();
 			InputKeyManager.Init(this);
 			RunTests();
@@ -76,15 +87,48 @@ package
 		{
 			scene = new SceneGraph();
 			
-			
-			
 			CreateBackground();
 			DisplayMainMenu();
 			
 			addEventListener(Event.ENTER_FRAME, UpdateLoop);
 			//CreateTestGameObjects();
 			dispatch.addEventListener(CustomEvent.START, StartGame);
+			dispatch.addEventListener(CustomEvent.SCORE, IncrementScore);
+			dispatch.addEventListener(CustomEvent.GAMEOVER, ResetScore);
+		}
+		
+		private function ResetScore(event:CustomEvent) : void
+		{
+			score = 0;
+			RefreshScore();
+		}
+		
+		private function IncrementScore(event:CustomEvent) : void
+		{
+			score++;
+			RefreshScore();
+		}
+		
+		private function RefreshScore() : void
+		{
+			scoreText.text = "Total Score: " + score.toString();
+		}
+		
+		
+		
+		private function SetupScoreFont(): void
+		{
+			// create our TextFormat
+			Font.registerFont(FontBank.ScoreFontClass);
+			var format:TextFormat = new TextFormat();
+			format.font = "SAMSB";
+			format.size = 25;
 			
+			scoreText.defaultTextFormat = format;
+			scoreText.embedFonts = true;
+			
+			scoreText.height = 30;
+			scoreText.width = 250;
 		}
 		
 		private function StartGame(event:CustomEvent)
@@ -94,7 +138,6 @@ package
 			menuExitGO.CRenderer.SetVisible(false);
 			menuInstructionsGO.CRenderer.SetVisible(false);
 			CreateGameObjects();
-			trace("START");
 		}
 		
 		private function CreateBackground(): void
@@ -114,6 +157,12 @@ package
 			FoodGO.AddComponent(new Animator(5));
 			scene.Add(FoodGO);
 			
+			//ADD SCORE
+			scoreText.y = TextureBank.backgroundTex.height - scoreText.height;
+			RefreshScore();
+			addChild(scoreText);
+			
+			// ADD SNAKE
 			var SnakeGO:GameObject = new GameObject();
 			SnakeGO.AddComponent(new Snake(this));
 			scene.Add(SnakeGO);
