@@ -27,6 +27,11 @@ package Engine.EntityComponent.Components
 			sprite.rotation = gameObject.CTransform.Rotation;
 		}
 		
+		public function SetVisible(isVisible : Boolean) : void
+		{
+			sprite.visible = isVisible;
+		}
+		
 		public function AddEventListener(event : String, listener : Function) : void
 		{
 			sprite.addEventListener(event, listener);
