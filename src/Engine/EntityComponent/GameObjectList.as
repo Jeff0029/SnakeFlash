@@ -6,16 +6,20 @@ package Engine.EntityComponent
 	 */
 	public class GameObjectList 
 	{
-		public var head:GameObject;
+		public var head:GameObjectNode;
+		public var count:int = 0;
 		public function GameObjectList() 
 		{
-			
+			count = 0;
 		}
 		
-		public function Add(Element:GameObject):void
+		public function Add(Element:GameObjectNode):void
 		{
+			count++;
 			if (head == null)
+			{
 				head = Element;
+			}
 			else
 			{
 				Element.Next = head;
@@ -27,7 +31,7 @@ package Engine.EntityComponent
 		
 		public function UpdateAll():void
 		{
-			var current:GameObject = head;
+			var current:GameObjectNode = head;
 			
 			while (current != null)
 			{

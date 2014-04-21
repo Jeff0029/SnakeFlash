@@ -14,8 +14,9 @@ package Gameplay
 			SetFood();
 		}
 		
-		function SetFood()
+		public function SetFood()
 		{
+			var isSet: Boolean = false;
 			do
 			{	
 				var collumSelection:int;
@@ -24,10 +25,12 @@ package Gameplay
 				collumSelection = Math.random() * (Tiles.COLUMNS-1);
 				if (((Tiles.tiles[rowSelection][collumSelection] as GameObject).GetComponent(Tile) as Tile).tileEnum == TileEnum.empty)
 				{
-					CTransform.Position = new Vector2(collumSelection * Tile.WIDTH + Tile.WIDTH/2 , rowSelection * Tile.HEIGHT + Tile.HEIGHT/2);
+					CTransform.Position = new Vector2(collumSelection * Tile.WIDTH + Tile.WIDTH / 2 , rowSelection * Tile.HEIGHT + Tile.HEIGHT / 2);
+					Tiles.SetTileState(collumSelection, rowSelection, TileEnum.snakeFood);
+					isSet = true;
 					isVisible = true;
 				}
-			}while(!isVisible)
+			}while(!isSet)
 		}
 	}
 

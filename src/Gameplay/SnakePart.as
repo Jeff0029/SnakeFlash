@@ -1,16 +1,19 @@
 package Gameplay 
 {
+	import Engine.EntityComponent.Components.Component;
 	import Engine.EntityComponent.GameObject;
 	/**
 	 * ...
 	 * @author ...
 	 */
-	public class SnakePart extends GameObject
+	public class SnakePart extends Component
 	{
-		
-		public function SnakePart() 
+		public var tilePosX:int;
+		public var tilePosY:int;
+		public function SnakePart(x:int, y:int) 
 		{
-			
+			tilePosX = x;
+			tilePosY = y;
 		}
 		
 	}

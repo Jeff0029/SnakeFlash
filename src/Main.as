@@ -25,9 +25,9 @@ package
 	[SWF(width=960, height=640, frameRate=24, backgroundColor=0xE2E2E2)]
 	public class Main extends Sprite 
 	{
-		private var scene : SceneGraph;
+		public var scene : SceneGraph;
 		private var updateLimiter : int = 0;
-		
+		public var FoodGO:Food;
 		public function Main():void 
 		{
 			if (stage) init();
@@ -61,7 +61,7 @@ package
 			scene = new SceneGraph();
 			
 			CreateGameObjects();
-			CreateTestGameObjects();
+			//CreateTestGameObjects();
 			
 			scene.Start();
 			
@@ -73,18 +73,17 @@ package
 			// ADD BACKGROUND
 			var BackgroundGO:GameObject = new GameObject();
 			BackgroundGO.AddComponent(new Renderer(TextureBank.backgroundTex, this));
-			//BackgroundGO.CTransform.Translate(new Vector2(this.width / 2, this.height / 2));
 			BackgroundGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/2));
 			scene.Add(BackgroundGO);
 			
 			// ADD FOOD
-			var FoodGO:Food = new Food();
+			FoodGO = new Food();
 			FoodGO.AddComponent(new CellRenderer(TextureBank.foodTexClass, this));
 			FoodGO.AddComponent(new Animator(5));
 			scene.Add(FoodGO);
 			
 			var SnakeGO:GameObject = new GameObject();
-			SnakeGO.AddComponent(new Snake());
+			SnakeGO.AddComponent(new Snake(this));
 			scene.Add(SnakeGO);
 		}
 		private function CreateTestGameObjects() : void
@@ -111,7 +110,6 @@ package
 			if (updateLimiter == 0)
 				scene.Update();
 		}
-		
 	}
 	
 }

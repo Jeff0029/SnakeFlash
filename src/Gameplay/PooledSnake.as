@@ -1,28 +1,20 @@
 package Gameplay 
 {
-	import basefolder.GameObject;
+	import Engine.EntityComponent.GameObject;
+	import Engine.EntityComponent.GameObjectNode;
 	import flash.display.Bitmap;
 	/**
 	 * ...
 	 * @author ...
 	 */
-	public class PooledSnake extends GameObject
+	public class PooledSnake extends GameObjectNode
 	{
 		
 		//{ POOL VARIABLES
 		private static var HeadPool:PooledSnake;
-		var NextPoolItem:PooledSnake;
+		private var NextPoolItem:PooledSnake;
+		private var m_GameObject:GameObject;
 		//}
-		
-		//fields
-		var VelocityX:Number;
-		var VelocityY:Number;
-		var AliveTime:Number;
-		var Opacity:Number;
-		var Image:Bitmap;
-		
-		public static const MOUSE_X_OFFSET:Number = -5;
-		public static const MOUSE_Y_OFFSET:Number = -5;
 		
 		public function PooledSnake() 
 		{
@@ -43,10 +35,6 @@ package Gameplay
 				Vessel = new PooledSnake();
 			}
 
-			
-			//subscribe
-			Game.DisplayList.addChild(Vessel.graphics);
-			Game.updateList.Add(Vessel);
 			return Vessel;
 		}
 
@@ -57,14 +45,9 @@ package Gameplay
 			super.Update();
 		}
 		
-		override public function Recycle():void 
+		public override function Recycle():void 
 		{
-			if (Game.DisplayList.contains(graphics))
-				Game.DisplayList.removeChild(graphics);
 
-			RemoveFromList();
-			graphics.removeChild(Image);
-			
 			//return to the pool
 			NextPoolItem = HeadPool;
 			HeadPool = this;

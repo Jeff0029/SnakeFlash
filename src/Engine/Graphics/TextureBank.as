@@ -25,6 +25,14 @@ package Engine.Graphics
 		private static var FoodTexClass : Class;
 		public static var foodTexClass : BitmapData = GetBitmapData(FoodTexClass);
 		
+		[Embed(source = "../../../Resources/Textures/Snake/SnakeSUpSheet_First.png")]
+		private static var SnakeUpFirstTexClass : Class;
+		public static var snakeUpFirstTexClass : BitmapData = GetBitmapData(SnakeUpFirstTexClass);
+		
+		[Embed(source = "../../../Resources/Textures/Menu/GameOver_Title.png")]
+		private static var GameOverTitleTexClass : Class;
+		public static var gameOverTitleTexClass : BitmapData = GetBitmapData(GameOverTitleTexClass);
+		
 		private static function GetBitmapData(data : Class) : BitmapData
 		{
 			return (new data() as Bitmap).bitmapData;
