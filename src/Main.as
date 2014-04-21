@@ -61,7 +61,7 @@ package
 			scene = new SceneGraph();
 			
 			CreateGameObjects();
-			//CreateTestGameObjects();
+			CreateTestGameObjects();
 			scene.Start();
 			
 			addEventListener(Event.ENTER_FRAME, UpdateLoop);
