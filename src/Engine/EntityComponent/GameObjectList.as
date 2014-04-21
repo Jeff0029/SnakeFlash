@@ -35,7 +35,7 @@ package Engine.EntityComponent
 			
 			while (current != null)
 			{
-				var Next = current.Next;
+				var Next:GameObjectNode = current.Next;
 				current.Update();
 				current = Next;
 			}
