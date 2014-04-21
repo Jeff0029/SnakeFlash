@@ -19,13 +19,12 @@ package Gameplay
 	public class Snake extends Component
 	{
 		var size:Number;
-		const STARTING_SIZE:Number = 8;
+		const STARTING_SIZE:Number = 5;
 		var direction:DirectionEnum = new DirectionEnum();
 		var snakeList:GameObjectList = new GameObjectList();
 		var newPos:Vector2 = Vector2.Zero;
 		private var main:Main;
 		var isDead:Boolean = false;
-		var growSize:int = 1;
 		public function Snake(main:Main) 
 		{
 			isDead = false;
@@ -87,12 +86,30 @@ package Gameplay
 				}
 				if (Tiles.GetTileState(newPos.X, newPos.Y) == TileEnum.snakeFood)
 				{
+					Tiles.SetTileState(newPos.X, newPos.Y, TileEnum.empty);
 					main.FoodGO.SetFood();
+					grow();
 					trace("FOOOD");
 				}
-				moveWholeSnake(newPos.X, newPos.Y, snakeList);
+				else
+				{
+					moveWholeSnake(newPos.X, newPos.Y, snakeList);
+				}
 				snakeList.UpdateAll();			
 			}
+		}
+		
+		function grow()
+		{
+			var position:Vector2 = GetSnakePartCoord(snakeList.head.gameObject);
+			snakeList.Add(PooledSnake.Create() as GameObjectNode);
+			snakeList.head.gameObject = new GameObject();
+			snakeList.head.gameObject.CTransform.Position = GiveTilePosition(position.X, position.Y);
+			Tiles.SetTileState(position.X, position.Y, TileEnum.snakePart);
+			snakeList.head.gameObject.AddComponent(new SnakePart(position.X, position.Y));
+			snakeList.head.gameObject.AddComponent(new CellRenderer(TextureBank.testAnimatedTex, main));
+			snakeList.head.gameObject.AddComponent(new Animator(5));
+			main.scene.Add(snakeList.head.gameObject);
 		}
 		
 		function GetSnakePartCoord(snakePart:GameObject):Vector2
@@ -106,6 +123,12 @@ package Gameplay
 			(snakePart.GetComponent(SnakePart) as SnakePart).tilePosY = coord.Y;
 		}
 		
+		function moveHead(x:int, y:int, head:GameObjectNode)
+		{
+			SetSnakePartCoord(head.gameObject, new Vector2(x, y));
+			head.gameObject.CTransform.Position = GiveTilePosition(x, y);
+		}
+		
 		function moveWholeSnake(x:int, y:int, objsToMove:GameObjectList)
 		{
 			var currentObj: GameObjectNode = objsToMove.head;
@@ -113,8 +136,7 @@ package Gameplay
 			var lastCoord:Vector2 = GetSnakePartCoord(currentObj.gameObject);
 			
 			// Move first
-			SetSnakePartCoord(currentObj.gameObject, new Vector2(x, y));
-			currentObj.gameObject.CTransform.Position = GiveTilePosition(x, y);
+			moveHead(x, y, objsToMove.head);
 			var tempCoord:Vector2;
 			// Move all but first
 			for (var i:int = 0; i < objsToMove.count-1; i++)

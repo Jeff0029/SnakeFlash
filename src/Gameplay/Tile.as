@@ -21,7 +21,5 @@ package Gameplay
 			this.coord = coord;
 			this.tileEnum = tileEnum;
 		}
-		
 	}
-
 }
