@@ -3,6 +3,7 @@ package Engine.EntityComponent.Components
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	/**
 	 * A rendering component for displaying sprites.
 	 * @author Erik
@@ -10,10 +11,25 @@ package Engine.EntityComponent.Components
 	public class Renderer extends Component
 	{
 		private var parent : Sprite;
+		private var sprite : Sprite;
 		
 		public function Renderer(parent : Sprite) 
 		{
 			this.parent = parent;
+			sprite = new Sprite();
+			parent.addChild(sprite);
+		}
+		
+		public override function Update() : void
+		{
+			sprite.x = gameObject.CTransform.Position.X;
+			sprite.y = gameObject.CTransform.Position.Y;
+			sprite.rotation = gameObject.CTransform.Rotation;
+		}
+		
+		public function AddEventListener(event : String, listener : Function) : void
+		{
+			sprite.addEventListener(event, listener);
 		}
 		
 		protected function CreateChildSprite(imageData : BitmapData) : Sprite
@@ -27,7 +43,7 @@ package Engine.EntityComponent.Components
 		
 		protected function AddChildToParent(child : Sprite) : void
 		{
-			parent.addChild(child);
+			sprite.addChild(child);
 		}
 		
 	}

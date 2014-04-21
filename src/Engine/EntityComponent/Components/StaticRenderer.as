@@ -10,24 +10,14 @@ package Engine.EntityComponent.Components
 	public class StaticRenderer extends Renderer
 	{
 		private var imageData : BitmapData;
-		private var sprite : Sprite;
 		
 		public function StaticRenderer(bitmap : BitmapData, parent : Sprite) 
 		{
 			super(parent);
 			
 			imageData = bitmap;
-			sprite = new Sprite();
 			
-			sprite.addChild(CreateChildSprite(imageData));
-			AddChildToParent(sprite);
-		}
-		
-		public override function Update() : void
-		{
-			sprite.x = gameObject.CTransform.Position.X;
-			sprite.y = gameObject.CTransform.Position.Y;
-			sprite.rotation = gameObject.CTransform.Rotation;
+			AddChildToParent(CreateChildSprite(imageData));
 		}
 		
 	}

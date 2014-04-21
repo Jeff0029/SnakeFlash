@@ -36,13 +36,6 @@ package Engine.EntityComponent.Components
 			DisplaySprite(0);
 		}
 		
-		public override function Update() : void
-		{
-			activeSprite.x = gameObject.CTransform.Position.X;
-			activeSprite.y = gameObject.CTransform.Position.Y;
-			activeSprite.rotation = gameObject.CTransform.Rotation;
-		}
-		
 		public function DisplaySprite(index : int) : void
 		{
 			activeSprite.visible = false;

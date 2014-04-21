@@ -170,11 +170,11 @@ package Gameplay
 			GameOverExitGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3 + TextureBank.gameOverTitleTex.height + TextureBank.gameOverRetryTex.height));
 			main.scene.Add(GameOverExitGO);
 			
-			//(GameOverRetryGO.CRenderer.sprite.addEventListener(MouseEvent.MOUSE_OVER, OnMouseOver(GameOverRetryGO, TextureBank.gameOverRetrySelectedTex)));
-			//(GameOverRetryGO.CRenderer.sprite.addEventListener(MouseEvent.MOUSE_OUT, OnMouseOver(GameOverRetryGO, TextureBank.gameOverRetryTex)));
+			GameOverRetryGO.CRenderer.AddEventListener(MouseEvent.MOUSE_OVER, OnMouseOver(GameOverRetryGO, TextureBank.gameOverRetrySelectedTex));
+			GameOverRetryGO.CRenderer.AddEventListener(MouseEvent.MOUSE_OUT, OnMouseOver(GameOverRetryGO, TextureBank.gameOverRetryTex));
 			
-			//(GameOverExitGO.CRenderer.sprite.addEventListener(MouseEvent.MOUSE_OVER, OnMouseOver(GameOverExitGO, TextureBank.gameOverExitSelectedTex)));
-			//(GameOverExitGO.CRenderer.sprite.addEventListener(MouseEvent.MOUSE_OUT, OnMouseOver(GameOverExitGO, TextureBank.gameOverExitTex)));
+			GameOverExitGO.CRenderer.AddEventListener(MouseEvent.MOUSE_OVER, OnMouseOver(GameOverExitGO, TextureBank.gameOverExitSelectedTex));
+			GameOverExitGO.CRenderer.AddEventListener(MouseEvent.MOUSE_OUT, OnMouseOver(GameOverExitGO, TextureBank.gameOverExitTex));
 			
 			
 		}
@@ -184,7 +184,7 @@ package Gameplay
 			return function(e:MouseEvent):void 
 			{
 				//gameObjectHover.CRenderer.imageData = texture;
-				gameObjectHover.CRenderer.Start();
+				//gameObjectHover.CRenderer.Start();
 			}
 			
 		}

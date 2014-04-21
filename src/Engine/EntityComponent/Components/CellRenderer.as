@@ -17,28 +17,18 @@ package Engine.EntityComponent.Components
 		
 		private var imageData : BitmapData;
 		private var canvasData : BitmapData;
-		private var sprite : Sprite;
 		
 		public function CellRenderer(bitmap : BitmapData, parent : Sprite) 
 		{
 			super(parent);
 			
 			imageData = bitmap;
-			sprite = new Sprite();
 			
 			canvasData = new BitmapData(CELL_SIZE, CELL_SIZE);
 			
 			DisplaySubsection(CLEAR_RECT);
 			
-			sprite.addChild(CreateChildSprite(canvasData));
-			AddChildToParent(sprite);
-		}
-		
-		public override function Update() : void
-		{
-			sprite.x = gameObject.CTransform.Position.X;
-			sprite.y = gameObject.CTransform.Position.Y;
-			sprite.rotation = gameObject.CTransform.Rotation;
+			AddChildToParent(CreateChildSprite(canvasData));
 		}
 		
 		internal function DisplaySubsection(rect : Rectangle) : void
