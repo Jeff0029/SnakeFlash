@@ -64,6 +64,27 @@ package Engine.Graphics
 		private static var MainMenuTitleTexClass : Class;
 		public static var mainMenuTitleTex : BitmapData = GetBitmapData(MainMenuTitleTexClass);
 		
+		[Embed(source = "../../../Resources/Textures/Menu/MainMenu_Play.png")]
+		private static var MainMenuPlayTexClass : Class;
+		public static var mainMenuPlayTex : BitmapData = GetBitmapData(MainMenuPlayTexClass);
+		
+		[Embed(source = "../../../Resources/Textures/Menu/MainMenu_Play_Selected.png")]
+		private static var MainMenuPlaySelectedTexClass : Class;
+		public static var mainMenuPlaySelectedTex : BitmapData = GetBitmapData(MainMenuPlaySelectedTexClass);
+		
+		[Embed(source = "../../../Resources/Textures/Menu/MainMenu_Exit.png")]
+		private static var MainMenuExitTexClass : Class;
+		public static var mainMenuExitTex : BitmapData = GetBitmapData(MainMenuExitTexClass);
+		
+		[Embed(source = "../../../Resources/Textures/Menu/MainMenu_Exit_Selected.png")]
+		private static var MainMenuExitSelectedTexClass : Class;
+		public static var mainMenuExitSelectedTex : BitmapData = GetBitmapData(MainMenuExitSelectedTexClass);
+		
+		
+		[Embed(source = "../../../Resources/Textures/Menu/MainMenu_Controls.png")]
+		private static var MainMenuControlsTexClass : Class;
+		public static var mainMenuControlsTex : BitmapData = GetBitmapData(MainMenuControlsTexClass);
+		
 		private static function GetBitmapData(data : Class) : BitmapData
 		{
 			return (new data() as Bitmap).bitmapData;

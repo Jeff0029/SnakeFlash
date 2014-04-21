@@ -19,7 +19,6 @@ package Gameplay
 	import Engine.Graphics.TextureBank;
 	import flash.events.Event;
 	import MathLib.Vector2;
-	import flash.system.System;
 	/**
 	 * ...
 	 * @author Jean-Francois Vienneau
@@ -33,7 +32,6 @@ package Gameplay
 		var newPos:Vector2 = Vector2.Zero;
 		private var main:Main;
 		var isDead:Boolean = false;
-		static var dispatch:EventDispatcher = new EventDispatcher();
 		var GameOverTextGO:GameObject;
 		var GameOverRetryGO:GameObject;
 		var GameOverExitGO:GameObject;
@@ -195,48 +193,15 @@ package Gameplay
 			(GameOverExitGO.CRenderer as MultiRenderer).DisplaySprite(0);
 			main.scene.Add(GameOverExitGO);
 			
-			dispatch.addEventListener(CustomEvent.RESET, Reset);
+			Main.dispatch.addEventListener(CustomEvent.RESET, Reset);
 			
-			GameOverRetryGO.CRenderer.AddEventListener(MouseEvent.ROLL_OVER, ChangeButtonState(GameOverRetryGO, TextureBank.gameOverRetrySelectedTex, InputEnum.retry));
-			GameOverRetryGO.CRenderer.AddEventListener(MouseEvent.ROLL_OUT, ChangeButtonState(GameOverRetryGO, TextureBank.gameOverRetryTex, InputEnum.none));
+			GameOverRetryGO.CRenderer.AddEventListener(MouseEvent.ROLL_OVER, Main.ChangeButtonState(GameOverRetryGO, InputEnum.retry));
+			GameOverRetryGO.CRenderer.AddEventListener(MouseEvent.ROLL_OUT, Main.ChangeButtonState(GameOverRetryGO, InputEnum.none));
 			
-			GameOverExitGO.CRenderer.AddEventListener(MouseEvent.ROLL_OVER, ChangeButtonState(GameOverExitGO, TextureBank.gameOverExitSelectedTex, InputEnum.exit));
-			GameOverExitGO.CRenderer.AddEventListener(MouseEvent.ROLL_OUT, ChangeButtonState(GameOverExitGO, TextureBank.gameOverExitTex, InputEnum.none));
+			GameOverExitGO.CRenderer.AddEventListener(MouseEvent.ROLL_OVER, Main.ChangeButtonState(GameOverExitGO, InputEnum.exit));
+			GameOverExitGO.CRenderer.AddEventListener(MouseEvent.ROLL_OUT, Main.ChangeButtonState(GameOverExitGO, InputEnum.none));
 		}
-		
-		static function ChangeButtonState(gameObjectHover:GameObject, texture:BitmapData, inputType:InputEnum):Function
-		{
-			return function(e:MouseEvent):void 
-			{
-				if (inputType != InputEnum.none)
-				{
-					(gameObjectHover.CRenderer as MultiRenderer).DisplaySprite(1);
-					gameObjectHover.CRenderer.AddEventListener(MouseEvent.CLICK, ListenForInput(inputType));
-				}
-				else
-				{
-					(gameObjectHover.CRenderer as MultiRenderer).DisplaySprite(0);
-					gameObjectHover.CRenderer.RemoveEventListener(MouseEvent.CLICK, ListenForInput(inputType));
-				}
-			}
-		}
-		
-		static function ListenForInput(InputType:InputEnum):Function
-		{
-			return function(e:MouseEvent):void
-			{
-				switch(InputType)
-				{
-					case InputEnum.exit:
-						System.exit(0);
-						break;
-					case InputEnum.retry:
-						dispatch.dispatchEvent(new CustomEvent("Reset"))
-						break;
-				}
-			}
-		}
-		
+
 		function GiveTilePosition(x:int, y:int):Vector2
 		{
 			return new Vector2(((Tiles.tiles[y][x] as GameObject).GetComponent(Tile) as Tile).coord.X + Tile.WIDTH/2, ((Tiles.tiles[y][x] as GameObject).GetComponent(Tile) as Tile).coord.Y + Tile.HEIGHT/2);

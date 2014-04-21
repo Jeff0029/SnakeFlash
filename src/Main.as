@@ -15,12 +15,17 @@ package
 	import Engine.SceneGraph.SceneGraph;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import Gameplay.Snake;
 	import MathLib.Vector2;
 	import Test.TestEntityComponent;
 	import Test.TestMath;
 	import Gameplay.Tiles;
 	import Test.TestMultiRendererComponent;
+	import Gameplay.InputEnum;
+	import flash.events.MouseEvent;
+	import flash.system.System;
+	import Gameplay.CustomEvent;
 	
 	/**
 	 * ...
@@ -32,6 +37,12 @@ package
 		public var scene : SceneGraph;
 		private var updateLimiter : int = 0;
 		public var FoodGO:Food;
+		public static var dispatch:EventDispatcher = new EventDispatcher();
+		
+		var menuTitleGO:GameObject;
+		var menuPlayGO:GameObject;
+		var menuExitGO:GameObject;
+		var menuInstructionsGO:GameObject;
 		
 		public function Main():void 
 		{
@@ -65,21 +76,38 @@ package
 		{
 			scene = new SceneGraph();
 			
+			
+			
+			CreateBackground();
 			DisplayMainMenu();
-			CreateGameObjects();
-			//CreateTestGameObjects();
 			
 			addEventListener(Event.ENTER_FRAME, UpdateLoop);
+			//CreateTestGameObjects();
+			dispatch.addEventListener(CustomEvent.START, StartGame);
+			
 		}
 		
-		private function CreateGameObjects() : void
+		private function StartGame(event:CustomEvent)
+		{
+			menuTitleGO.CRenderer.SetVisible(false)
+			menuPlayGO.CRenderer.SetVisible(false);
+			menuExitGO.CRenderer.SetVisible(false);
+			menuInstructionsGO.CRenderer.SetVisible(false);
+			CreateGameObjects();
+			trace("START");
+		}
+		
+		private function CreateBackground(): void
 		{
 			// ADD BACKGROUND
 			var BackgroundGO:GameObject = new GameObject();
 			BackgroundGO.AddComponent(new StaticRenderer(TextureBank.backgroundTex, this));
 			BackgroundGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/2));
 			scene.Add(BackgroundGO);
-			
+		}
+		
+		private function CreateGameObjects() : void
+		{			
 			// ADD FOOD
 			FoodGO = new Food();
 			FoodGO.AddComponent(new CellRenderer(TextureBank.foodTexClass, this));
@@ -119,10 +147,75 @@ package
 		
 		private function DisplayMainMenu()
 		{
-			var menuTitleGO:GameObject = new GameObject();
+			menuTitleGO = new GameObject();
 			menuTitleGO.AddComponent(new StaticRenderer(TextureBank.mainMenuTitleTex, this));
 			menuTitleGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3));
 			scene.Add(menuTitleGO);
+			
+			var mutliBitmapsPlay : Vector.<BitmapData> = new Vector.<BitmapData>();
+			mutliBitmapsPlay.push(TextureBank.mainMenuPlayTex, TextureBank.mainMenuPlaySelectedTex);
+			
+			menuPlayGO = new GameObject();
+			menuPlayGO.AddComponent(new MultiRenderer(mutliBitmapsPlay, this));
+			menuPlayGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width / 2, TextureBank.backgroundTex.height / 3 + TextureBank.mainMenuTitleTex.height));
+			(menuPlayGO.CRenderer as MultiRenderer).DisplaySprite(0);
+			scene.Add(menuPlayGO);
+			
+			var mutliBitmapsExit : Vector.<BitmapData> = new Vector.<BitmapData>();
+			mutliBitmapsExit.push(TextureBank.mainMenuExitTex, TextureBank.mainMenuExitSelectedTex);
+			
+			menuExitGO = new GameObject();
+			menuExitGO.AddComponent(new MultiRenderer(mutliBitmapsExit, this));
+			menuExitGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width / 2, TextureBank.backgroundTex.height / 3 + TextureBank.mainMenuTitleTex.height + TextureBank.mainMenuPlayTex.height));
+			(menuExitGO.CRenderer as MultiRenderer).DisplaySprite(0);
+			scene.Add(menuExitGO);
+			
+			menuInstructionsGO = new GameObject();
+			menuInstructionsGO.AddComponent(new StaticRenderer(TextureBank.mainMenuControlsTex, this));
+			menuInstructionsGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/4, TextureBank.backgroundTex.height/1.3));
+			scene.Add(menuInstructionsGO);
+			
+			menuPlayGO.CRenderer.AddEventListener(MouseEvent.ROLL_OVER, ChangeButtonState(menuPlayGO, InputEnum.start));
+			menuPlayGO.CRenderer.AddEventListener(MouseEvent.ROLL_OUT, ChangeButtonState(menuPlayGO, InputEnum.none));
+			
+			menuExitGO.CRenderer.AddEventListener(MouseEvent.ROLL_OVER, ChangeButtonState(menuExitGO, InputEnum.exit));
+			menuExitGO.CRenderer.AddEventListener(MouseEvent.ROLL_OUT, ChangeButtonState(menuExitGO, InputEnum.none));
+		}
+		
+		public static function ChangeButtonState(gameObjectHover:GameObject, inputType:InputEnum):Function
+		{
+			return function(e:MouseEvent):void 
+			{
+				if (inputType != InputEnum.none)
+				{
+					(gameObjectHover.CRenderer as MultiRenderer).DisplaySprite(1);
+					gameObjectHover.CRenderer.AddEventListener(MouseEvent.CLICK, ListenForInput(inputType));
+				}
+				else
+				{
+					(gameObjectHover.CRenderer as MultiRenderer).DisplaySprite(0);
+					gameObjectHover.CRenderer.RemoveEventListener(MouseEvent.CLICK, ListenForInput(inputType));
+				}
+			}
+		}
+		
+		public static function ListenForInput(InputType:InputEnum):Function
+		{
+			return function(e:MouseEvent):void
+			{
+				switch(InputType)
+				{
+					case InputEnum.start:
+						dispatch.dispatchEvent(new CustomEvent("Start"))
+						break;
+					case InputEnum.exit:
+						System.exit(0);
+						break;
+					case InputEnum.retry:
+						dispatch.dispatchEvent(new CustomEvent("Reset"))
+						break;
+				}
+			}
 		}
 		
 		private function UpdateLoop(e:Event) : void
