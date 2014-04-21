@@ -4,6 +4,7 @@ package Gameplay
 	import Engine.EntityComponent.Components.CellRenderer;
 	import Engine.EntityComponent.Components.Renderer;
 	import Engine.EntityComponent.Components.Component;
+	import Engine.EntityComponent.Components.StaticRenderer;
 	import Engine.EntityComponent.GameObject;
 	import Engine.EntityComponent.GameObjectNode;
 	import flash.display.BitmapData;
@@ -32,11 +33,6 @@ package Gameplay
 		private var main:Main;
 		var isDead:Boolean = false;
 		static var dispatch:EventDispatcher = new EventDispatcher();
-		
-		var GameOverExitGO:GameObject;
-		var GameOverRetryGO:GameObject;
-		var GameOverTextGO:GameObject
-		
 		public function Snake(main:Main) 
 		{
 			isDead = false;
@@ -119,8 +115,6 @@ package Gameplay
 		function Reset(event:CustomEvent):void 
 		{
 			trace("Reset");
-			//REMOVE TEXT
-			//RECYCLE SNAKE
 		}
 		
 		function GetSnakePartCoord(snakePart:GameObject):Vector2
@@ -166,44 +160,45 @@ package Gameplay
 		
 		function YouLost()
 		{
-			GameOverTextGO = new GameObject();
-			GameOverTextGO.AddComponent(new Renderer(TextureBank.gameOverTitleTex, main));
+			var GameOver:GameObject = new GameObject();
+			GameOver.AddComponent(new StaticRenderer(TextureBank.testTex, main));
+			GameOver.CTransform.Translate(new Vector2(64, 64));
+			main.scene.Add(GameOver);
+			
+			var GameOverTextGO:GameObject = new GameObject();
+			GameOverTextGO.AddComponent(new StaticRenderer(TextureBank.gameOverTitleTex, main));
 			GameOverTextGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3));
 			main.scene.Add(GameOverTextGO);
 			
-			GameOverRetryGO = new GameObject();
-			GameOverRetryGO.AddComponent(new Renderer(TextureBank.gameOverRetryTex, main));
+			var GameOverRetryGO:GameObject = new GameObject();
+			GameOverRetryGO.AddComponent(new StaticRenderer(TextureBank.gameOverRetryTex, main));
 			GameOverRetryGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3 + TextureBank.gameOverTitleTex.height));
 			main.scene.Add(GameOverRetryGO);
 			
-			GameOverExitGO = new GameObject();
-			GameOverExitGO.AddComponent(new Renderer(TextureBank.gameOverExitTex, main));
+			var GameOverExitGO:GameObject = new GameObject();
+			GameOverExitGO.AddComponent(new StaticRenderer(TextureBank.gameOverExitTex, main));
 			GameOverExitGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/3 + TextureBank.gameOverTitleTex.height + TextureBank.gameOverRetryTex.height));
 			main.scene.Add(GameOverExitGO);
 			
 			dispatch.addEventListener(CustomEvent.RESET, Reset);
 			
-			var gameOverRetrySprite:Sprite = GameOverRetryGO.CRenderer.sprite;
-			gameOverRetrySprite.addEventListener(MouseEvent.ROLL_OVER, ChangeButtonState(GameOverRetryGO, TextureBank.gameOverRetrySelectedTex, InputEnum.retry));
-			gameOverRetrySprite.addEventListener(MouseEvent.ROLL_OUT, ChangeButtonState(GameOverRetryGO, TextureBank.gameOverRetryTex, InputEnum.none));
+			GameOverRetryGO.CRenderer.AddEventListener(MouseEvent.ROLL_OVER, ChangeButtonState(GameOverRetryGO, TextureBank.gameOverRetrySelectedTex, InputEnum.retry));
+			GameOverRetryGO.CRenderer.AddEventListener(MouseEvent.ROLL_OUT, ChangeButtonState(GameOverRetryGO, TextureBank.gameOverRetryTex, InputEnum.none));
 			
-			var gameOverExitSprite:Sprite = GameOverExitGO.CRenderer.sprite;
-			gameOverExitSprite.addEventListener(MouseEvent.ROLL_OVER, ChangeButtonState(GameOverExitGO, TextureBank.gameOverExitSelectedTex, InputEnum.exit));
-			gameOverExitSprite.addEventListener(MouseEvent.ROLL_OUT, ChangeButtonState(GameOverExitGO, TextureBank.gameOverExitTex, InputEnum.none));
-			
-			
+			GameOverRetryGO.CRenderer.AddEventListener(MouseEvent.ROLL_OVER, ChangeButtonState(GameOverExitGO, TextureBank.gameOverExitSelectedTex, InputEnum.exit));
+			GameOverRetryGO.CRenderer.AddEventListener(MouseEvent.ROLL_OUT, ChangeButtonState(GameOverExitGO, TextureBank.gameOverExitTex, InputEnum.none));
 		}
 		
 		static function ChangeButtonState(gameObjectHover:GameObject, texture:BitmapData, inputType:InputEnum):Function
 		{
 			return function(e:MouseEvent):void 
 			{
-				gameObjectHover.CRenderer.imageData = texture;
-				gameObjectHover.CRenderer.Start();
+				//gameObjectHover.CRenderer.imageData = texture;
+				//gameObjectHover.CRenderer.Start();
 				if (inputType != InputEnum.none)
-					gameObjectHover.CRenderer.sprite.addEventListener(MouseEvent.CLICK, ListenForInput(inputType));
+					gameObjectHover.CRenderer.AddEventListener(MouseEvent.CLICK, ListenForInput(inputType));
 				else
-					gameObjectHover.CRenderer.sprite.removeEventListener(MouseEvent.CLICK, ListenForInput(inputType));
+					gameObjectHover.CRenderer.RemoveEventListener(MouseEvent.CLICK, ListenForInput(inputType));
 			}
 		}
 		

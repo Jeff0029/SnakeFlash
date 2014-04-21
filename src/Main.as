@@ -2,7 +2,10 @@ package
 {
 	import Engine.EntityComponent.Components.Animator;
 	import Engine.EntityComponent.Components.CellRenderer;
+	import Engine.EntityComponent.Components.MultiRenderer;
 	import Engine.EntityComponent.Components.Renderer;
+	import Engine.EntityComponent.Components.StaticRenderer;
+	import flash.display.BitmapData;
 	import flash.display.StageScaleMode;
 	import flash.display.StageAlign;
 	import Gameplay.Food;
@@ -17,6 +20,7 @@ package
 	import Test.TestEntityComponent;
 	import Test.TestMath;
 	import Gameplay.Tiles;
+	import Test.TestMultiRendererComponent;
 	
 	/**
 	 * ...
@@ -72,7 +76,7 @@ package
 		{
 			// ADD BACKGROUND
 			var BackgroundGO:GameObject = new GameObject();
-			BackgroundGO.AddComponent(new Renderer(TextureBank.backgroundTex, this));
+			BackgroundGO.AddComponent(new StaticRenderer(TextureBank.backgroundTex, this));
 			BackgroundGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/2, TextureBank.backgroundTex.height/2));
 			scene.Add(BackgroundGO);
 			
@@ -100,6 +104,17 @@ package
 			goAnimTest2.AddComponent(new Animator(4));
 			scene.Add(goAnimTest2);
 			goAnimTest2.CTransform.Translate(new Vector2(80, 80));
+			
+			var goMultiTest : GameObject = new GameObject();
+			
+			var mutliTestBitmaps : Vector.<BitmapData> = new Vector.<BitmapData>();
+			mutliTestBitmaps.push(TextureBank.testTex, TextureBank.testTex2);
+			
+			goMultiTest.AddComponent(new MultiRenderer(mutliTestBitmaps, this));
+			goMultiTest.AddComponent(new TestMultiRendererComponent());
+			scene.Add(goMultiTest);
+			goMultiTest.CTransform.Translate(new Vector2(150, 150));
+			(goMultiTest.CRenderer as MultiRenderer).DisplaySprite(1);
 		}
 		
 		private function DisplayMainMenu()

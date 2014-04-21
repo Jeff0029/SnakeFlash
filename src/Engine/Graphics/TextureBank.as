@@ -13,6 +13,10 @@ package Engine.Graphics
 		private static var TestTexClass : Class;
 		public static var testTex : BitmapData = GetBitmapData(TestTexClass);
 		
+		[Embed(source = "../../../Resources/Textures/Debug/TestTexture2.png")]
+		private static var TestTex2Class : Class;
+		public static var testTex2 : BitmapData = GetBitmapData(TestTex2Class);
+		
 		[Embed(source = "../../../Resources/Textures/Debug/TestAnimatedTexture.png")]
 		private static var TestAnimatedTexClass : Class;
 		public static var testAnimatedTex : BitmapData = GetBitmapData(TestAnimatedTexClass);
