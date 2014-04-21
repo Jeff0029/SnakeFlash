@@ -3,7 +3,9 @@ package Engine.EntityComponent
 	import Engine.EntityComponent.Components.CellRenderer;
 	import Engine.EntityComponent.Components.Component;
 	import Engine.EntityComponent.Components.IComponent;
+	import Engine.EntityComponent.Components.MultiRenderer;
 	import Engine.EntityComponent.Components.Renderer;
+	import Engine.EntityComponent.Components.StaticRenderer;
 	import Engine.EntityComponent.Components.Transform;
 	import flash.utils.getQualifiedClassName;
 	import MathLib.Vector2;
@@ -16,8 +18,9 @@ package Engine.EntityComponent
 		private const TRANSFORM_TYPE : String = getQualifiedClassName(Transform);
 		private var transform : Transform;
 		
-		private const RENDERER_TYPE : String = getQualifiedClassName(Renderer);
+		private const STATIC_RENDERER_TYPE : String = getQualifiedClassName(StaticRenderer);
 		private const CELL_RENDERER_TYPE : String = getQualifiedClassName(CellRenderer);
+		private const MULTI_RENDERER_TYPE : String = getQualifiedClassName(MultiRenderer);
 		private var renderer : Renderer;
 		
 		private var components : Vector.<IComponent> = new Vector.<IComponent>();
@@ -57,7 +60,8 @@ package Engine.EntityComponent
 			switch (toAddType)
 			{
 				case TRANSFORM_TYPE: transform = Transform(toAdd); break;
-				case RENDERER_TYPE:	// Fall through
+				case STATIC_RENDERER_TYPE:	// Fall through
+				case MULTI_RENDERER_TYPE:
 				case CELL_RENDERER_TYPE: renderer = Renderer(toAdd); break;
 			}
 		}

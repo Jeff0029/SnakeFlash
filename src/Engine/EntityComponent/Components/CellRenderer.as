@@ -15,27 +15,30 @@ package Engine.EntityComponent.Components
 		private const CLEAR_RECT : Rectangle = new Rectangle(0, 0, CELL_SIZE, CELL_SIZE);
 		private const ZERO_POINT : Point = new Point(0, 0);
 		
+		private var imageData : BitmapData;
 		private var canvasData : BitmapData;
+		private var sprite : Sprite;
 		
 		public function CellRenderer(bitmap : BitmapData, parent : Sprite) 
 		{
-			super(bitmap, parent);
+			super(parent);
+			
+			imageData = bitmap;
+			sprite = new Sprite();
 			
 			canvasData = new BitmapData(CELL_SIZE, CELL_SIZE);
-		}
-		
-		public override function Start() : void
-		{
+			
 			DisplaySubsection(CLEAR_RECT);
 			
-			var childSprite : Sprite = new Sprite();
-			childSprite.addChild(new Bitmap(canvasData));
-			childSprite.x = -CELL_SIZE / 2;
-			childSprite.y = -CELL_SIZE / 2;
-			
-			sprite.addChild(childSprite);
-			
-			parent.addChild(sprite);
+			sprite.addChild(CreateChildSprite(canvasData));
+			AddChildToParent(sprite);
+		}
+		
+		public override function Update() : void
+		{
+			sprite.x = gameObject.CTransform.Position.X;
+			sprite.y = gameObject.CTransform.Position.Y;
+			sprite.rotation = gameObject.CTransform.Rotation;
 		}
 		
 		internal function DisplaySubsection(rect : Rectangle) : void

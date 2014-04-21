@@ -4,6 +4,7 @@ package Gameplay
 	import Engine.EntityComponent.Components.CellRenderer;
 	import Engine.EntityComponent.Components.Renderer;
 	import Engine.EntityComponent.Components.Component;
+	import Engine.EntityComponent.Components.StaticRenderer;
 	import Engine.EntityComponent.GameObject;
 	import Engine.EntityComponent.GameObjectNode;
 	import Gameplay.DirectionEnum;
@@ -156,7 +157,7 @@ package Gameplay
 		function YouLost()
 		{
 			var GameOver:GameObject = new GameObject();
-			GameOver.AddComponent(new Renderer(TextureBank.testTex, main));
+			GameOver.AddComponent(new StaticRenderer(TextureBank.testTex, main));
 			GameOver.CTransform.Translate(new Vector2(64, 64));
 			main.scene.Add(GameOver);
 		}

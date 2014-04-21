@@ -7,35 +7,27 @@ package Engine.EntityComponent.Components
 	 * A rendering component for displaying sprites.
 	 * @author Erik
 	 */
-	public class Renderer extends Component 
+	public class Renderer extends Component
 	{
-		protected var imageData : BitmapData;
-		protected var parent : Sprite;
-		protected var sprite : Sprite;
+		private var parent : Sprite;
 		
-		public function Renderer(bitmap : BitmapData, parent : Sprite) 
+		public function Renderer(parent : Sprite) 
 		{
-			imageData = bitmap;
 			this.parent = parent;
-			sprite = new Sprite();
 		}
 		
-		public override function Start() : void
+		protected function CreateChildSprite(imageData : BitmapData) : Sprite
 		{
 			var childSprite : Sprite = new Sprite();
 			childSprite.addChild(new Bitmap(imageData));
 			childSprite.x = -imageData.width / 2;
 			childSprite.y = -imageData.height / 2;
-			
-			sprite.addChild(childSprite);
-			parent.addChild(sprite);
+			return childSprite;
 		}
 		
-		public override function Update() : void
+		protected function AddChildToParent(child : Sprite) : void
 		{
-			sprite.x = gameObject.CTransform.Position.X;
-			sprite.y = gameObject.CTransform.Position.Y;
-			sprite.rotation = gameObject.CTransform.Rotation;
+			parent.addChild(child);
 		}
 		
 	}
