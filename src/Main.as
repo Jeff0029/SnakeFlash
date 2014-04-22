@@ -28,6 +28,8 @@ package
 	import Test.TestEntityComponent;
 	import Test.TestMath;
 	import Gameplay.Tiles;
+	import Gameplay.Tile;
+	import Gameplay.TileEnum;
 	import Test.TestMultiRendererComponent;
 	import Gameplay.InputEnum;
 	import flash.events.MouseEvent;
@@ -45,15 +47,15 @@ package
 		private var updateLimiter : int = 0;
 		public var FoodGO:Food;
 		public static var dispatch:EventDispatcher = new EventDispatcher();
-		var scoreText:TextField = new TextField();
-		var scoreTextFormat:TextFormat = new TextFormat();
-		var scoreFont:Font = new Font();
-		var score:int = 0;
+		private var scoreText:TextField = new TextField();
+		private var scoreTextFormat:TextFormat = new TextFormat();
+		private var scoreFont:Font = new Font();
+		private var score:int = 0;
 		
-		var menuTitleGO:GameObject;
-		var menuPlayGO:GameObject;
-		var menuExitGO:GameObject;
-		var menuInstructionsGO:GameObject;
+		private var menuTitleGO:GameObject;
+		private var menuPlayGO:GameObject;
+		private var menuExitGO:GameObject;
+		private var menuInstructionsGO:GameObject;
 		
 		public function Main():void 
 		{
@@ -94,7 +96,14 @@ package
 			//CreateTestGameObjects();
 			dispatch.addEventListener(CustomEvent.START, StartGame);
 			dispatch.addEventListener(CustomEvent.SCORE, IncrementScore);
-			dispatch.addEventListener(CustomEvent.GAMEOVER, ResetScore);
+			dispatch.addEventListener(CustomEvent.RESET, ResetScore);
+			dispatch.addEventListener(CustomEvent.RESET, ResetFood);
+		}
+		
+		private function ResetFood(event:CustomEvent) : void
+		{
+			Tiles.SetTileState(FoodGO.CTransform.Position.X/Tile.WIDTH, FoodGO.CTransform.Position.Y/Tile.HEIGHT, TileEnum.empty)
+			FoodGO.SetFood();
 		}
 		
 		private function ResetScore(event:CustomEvent) : void
@@ -114,13 +123,12 @@ package
 			scoreText.text = "Total Score: " + score.toString();
 		}
 		
-		
-		
 		private function SetupScoreFont(): void
 		{
-			// create our TextFormat
+			// Add our font to the list
 			Font.registerFont(FontBank.ScoreFontClass);
 			var format:TextFormat = new TextFormat();
+			// Set our new font
 			format.font = "SAMSB";
 			format.size = 25;
 			
@@ -131,7 +139,7 @@ package
 			scoreText.width = 250;
 		}
 		
-		private function StartGame(event:CustomEvent)
+		private function StartGame(event:CustomEvent) : void
 		{
 			menuTitleGO.CRenderer.SetVisible(false)
 			menuPlayGO.CRenderer.SetVisible(false);
@@ -194,7 +202,7 @@ package
 			(goMultiTest.CRenderer as MultiRenderer).DisplaySprite(1);
 		}
 		
-		private function DisplayMainMenu()
+		private function DisplayMainMenu() : void
 		{
 			menuTitleGO = new GameObject();
 			menuTitleGO.AddComponent(new StaticRenderer(TextureBank.mainMenuTitleTex, this));
@@ -221,7 +229,7 @@ package
 			
 			menuInstructionsGO = new GameObject();
 			menuInstructionsGO.AddComponent(new StaticRenderer(TextureBank.mainMenuControlsTex, this));
-			menuInstructionsGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/4, TextureBank.backgroundTex.height/1.3));
+			menuInstructionsGO.CTransform.Translate(new Vector2(TextureBank.backgroundTex.width/4, TextureBank.backgroundTex.height/1.25));
 			scene.Add(menuInstructionsGO);
 			
 			menuPlayGO.CRenderer.AddEventListener(MouseEvent.ROLL_OVER, ChangeButtonState(menuPlayGO, InputEnum.start));

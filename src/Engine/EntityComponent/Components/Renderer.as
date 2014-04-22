@@ -37,7 +37,7 @@ package Engine.EntityComponent.Components
 			sprite.addEventListener(event, listener);
 		}
 		
-		public function RemoveEventListener(event : String, listener : Function)
+		public function RemoveEventListener(event : String, listener : Function) : void
 		{
 			sprite.removeEventListener(event, listener);
 		}

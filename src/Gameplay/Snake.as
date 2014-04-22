@@ -20,22 +20,22 @@ package Gameplay
 	import flash.events.Event;
 	import MathLib.Vector2;
 	/**
-	 * ...
+	 * Player's character
 	 * @author Jean-Francois Vienneau
 	 */
 	public class Snake extends Component
 	{
-		var size:Number;
-		const STARTING_SIZE:Number = 5;
-		var direction:DirectionEnum = new DirectionEnum();
-		var snakeList:GameObjectList = new GameObjectList();
-		var newPos:Vector2 = Vector2.Zero;
+		private var size:Number;
+		private const STARTING_SIZE:Number = 5;
+		private var direction:DirectionEnum = new DirectionEnum();
+		private var snakeList:GameObjectList = new GameObjectList();
+		private var newPos:Vector2 = Vector2.Zero;
 
 		private var main:Main;
-		var isDead:Boolean = false;
-		var GameOverTextGO:GameObject;
-		var GameOverRetryGO:GameObject;
-		var GameOverExitGO:GameObject;
+		private var isDead:Boolean = false;
+		private var GameOverTextGO:GameObject;
+		private var GameOverRetryGO:GameObject;
+		private var GameOverExitGO:GameObject;
 		public function Snake(main:Main) 
 		{
 			isDead = false;
@@ -43,7 +43,7 @@ package Gameplay
 			direction = DirectionEnum.right;
 			for (var i:int = 0; i < STARTING_SIZE; i++) 
 			{
-				Grow(new Vector2(i, 0));
+				Grow(new Vector2(i, 0), TextureBank.snakeStraightUpTex);
 			}	
 		}
 		
@@ -90,32 +90,33 @@ package Gameplay
 				}
 				if (Tiles.GetTileState(newPos.X, newPos.Y) == TileEnum.snakeFood)
 				{
+					// custom event to call the increment of the score
 					Main.dispatch.dispatchEvent(new CustomEvent("Score"));
+					// Remove the food state on the tile
 					Tiles.SetTileState(newPos.X, newPos.Y, TileEnum.empty);
+					Grow(newPos, TextureBank.snakeStraightUpTex);
+					// Set the food elsewhere
 					main.FoodGO.SetFood();
-					Grow(GetSnakePartCoord(snakeList.head.gameObject));
-					MoveWholeSnake(newPos.X, newPos.Y, snakeList);
 				}
-				else
-				{
-					MoveWholeSnake(newPos.X, newPos.Y, snakeList);
-				}	
+				MoveWholeSnake(newPos.X, newPos.Y, snakeList);
 			}
 		}
 		
-		function Grow(position:Vector2)
+		private function Grow(position:Vector2, bitmapdata:BitmapData) : void
 		{
 			snakeList.Add(PooledSnake.Create() as GameObjectNode);
 			snakeList.head.gameObject = new GameObject();
-			snakeList.head.gameObject.CTransform.Position = GiveTilePosition(position.X, position.Y);
+			
 			Tiles.SetTileState(position.X, position.Y, TileEnum.snakePart);
 			snakeList.head.gameObject.AddComponent(new SnakePart(position.X, position.Y));
-			snakeList.head.gameObject.AddComponent(new CellRenderer(TextureBank.snakeStraightUpTex, main));
+			MoveSnakePart(position.X, position.Y, snakeList.head);
+			snakeList.head.gameObject.AddComponent(new CellRenderer(bitmapdata, main));
 			snakeList.head.gameObject.AddComponent(new Animator(5));
 			main.scene.Add(snakeList.head.gameObject);
+			snakeList.UpdateAll();
 		}
 		
-		function Shrink(amount:int)
+		private function Shrink(amount:int) : void
 		{
 			for (var i:int = 0; i < amount; i++)
 			{
@@ -126,7 +127,7 @@ package Gameplay
 			}
 		}
 		
-		function Reset(event:CustomEvent):void 
+		private function Reset(event:CustomEvent) : void 
 		{
 			GameOverTextGO.CRenderer.SetVisible(false);
 			GameOverRetryGO.CRenderer.SetVisible(false);
@@ -137,24 +138,35 @@ package Gameplay
 			MoveWholeSnake(0, 0, snakeList);
 		}
 		
-		function GetSnakePartCoord(snakePart:GameObject):Vector2
+		private function GetSnakePartCoord(snakePart:GameObject):Vector2
 		{
 			return new Vector2((snakePart.GetComponent(SnakePart) as SnakePart).tilePosX, (snakePart.GetComponent(SnakePart) as SnakePart).tilePosY);
 		}
 		
-		function SetSnakePartCoord(snakePart:GameObject, coord:Vector2)
+		private function SetSnakePartCoord(snakePart:GameObject, coord:Vector2) : void
 		{
 			(snakePart.GetComponent(SnakePart) as SnakePart).tilePosX = coord.X;
 			(snakePart.GetComponent(SnakePart) as SnakePart).tilePosY = coord.Y;
 		}
 		
-		function MoveSnakePart(x:int, y:int, head:GameObjectNode)
+		private function MoveSnakePart(x:int, y:int, head:GameObjectNode) : void
 		{
+			var direction:Vector2;
+			direction = Vector2.Sub(GetSnakePartCoord(head.gameObject), new Vector2(x, y));
+			if (direction.X == -1)
+			head.gameObject.CTransform.Rotation = 90;
+			else if (direction.X == 1)
+			head.gameObject.CTransform.Rotation = 270;
+			else if (direction.Y == -1)
+			head.gameObject.CTransform.Rotation = 180;
+			else if (direction.Y == 1)
+			head.gameObject.CTransform.Rotation = 0;
+			
 			SetSnakePartCoord(head.gameObject, new Vector2(x, y));
 			head.gameObject.CTransform.Position = GiveTilePosition(x, y);
 		}
 		
-		function MoveWholeSnake(x:int, y:int, objsToMove:GameObjectList)
+		private function MoveWholeSnake(x:int, y:int, objsToMove:GameObjectList) : void
 		{
 			var currentObj: GameObjectNode = objsToMove.head;
 			var lastPos:Vector2 = currentObj.gameObject.CTransform.Position;
@@ -170,15 +182,14 @@ package Gameplay
 				var tempPos:Vector2 = currentObj.gameObject.CTransform.Position;
 				tempCoord = GetSnakePartCoord(currentObj.gameObject);
 				Tiles.SetTileState(tempCoord.X, tempCoord.Y, TileEnum.snakePart);
-				SetSnakePartCoord(currentObj.gameObject, lastCoord);
-				currentObj.gameObject.CTransform.Position = lastPos;
+				MoveSnakePart(lastCoord.X, lastCoord.Y, currentObj);
 				lastCoord = tempCoord;
 				lastPos = tempPos;
 			}
 			Tiles.SetTileState(tempCoord.X, tempCoord.Y, TileEnum.empty);
 		}
 		
-		function YouLost()
+		private function YouLost() : void
 		{		
 			GameOverTextGO = new GameObject();
 			GameOverTextGO.AddComponent(new StaticRenderer(TextureBank.gameOverTitleTex, main));
@@ -212,7 +223,7 @@ package Gameplay
 			GameOverExitGO.CRenderer.AddEventListener(MouseEvent.ROLL_OUT, Main.ChangeButtonState(GameOverExitGO, InputEnum.none));
 		}
 
-		function GiveTilePosition(x:int, y:int):Vector2
+		private function GiveTilePosition(x:int, y:int):Vector2
 		{
 			return new Vector2(((Tiles.tiles[y][x] as GameObject).GetComponent(Tile) as Tile).coord.X + Tile.WIDTH/2, ((Tiles.tiles[y][x] as GameObject).GetComponent(Tile) as Tile).coord.Y + Tile.HEIGHT/2);
 		}

@@ -8,8 +8,8 @@ package Gameplay
 	import Gameplay.Tile;
 	import MathLib.Vector2;
 	/**
-	 * ...
-	 * @author ...
+	 * 2D array of Tile
+	 * @author Jean-Francois Vienneau
 	 */
 	public class Tiles
 	{
@@ -38,7 +38,7 @@ package Gameplay
 			}
 		}
 		
-		public static function SetTileState(x:int, y:int, state:TileEnum)
+		public static function SetTileState(x:int, y:int, state:TileEnum) : void
 		{
 			((tiles[y][x] as GameObject).GetComponent(Tile) as Tile).tileEnum = state;
 		}

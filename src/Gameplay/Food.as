@@ -3,18 +3,18 @@ package Gameplay
 	import Engine.EntityComponent.GameObject;
 	import MathLib.Vector2;
 	/**
-	 * ...
-	 * @author ...
+	 * Entity that make the snake grow
+	 * @author Jean-Francois Vienneau
 	 */
 	public class Food extends GameObject
 	{
-		var isVisible:Boolean = false;
+		private var isVisible:Boolean = false;
 		public function Food() 
 		{
 			SetFood();
 		}
 		
-		public function SetFood()
+		public function SetFood() : void
 		{
 			var isSet: Boolean = false;
 			do
